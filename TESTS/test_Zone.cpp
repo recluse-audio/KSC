@@ -53,3 +53,21 @@ TEST_CASE("Zone containsPoint", "[Zone]")
         REQUIRE(zone.containsPoint(50, 70) == true);
     }
 }
+
+TEST_CASE("Zone getZoneID", "[Zone]")
+{
+    Location loc("TestLocation");
+    Zone::Bounds bounds(0, 0, 100, 100);
+
+    SECTION("returns the ID passed at construction")
+    {
+        Zone zone(loc, bounds, "MyZone");
+        REQUIRE(zone.getZoneID() == "MyZone");
+    }
+
+    SECTION("returns default ID when none provided")
+    {
+        Zone zone(loc, bounds);
+        REQUIRE(zone.getZoneID() == "Default Zone ID");
+    }
+}
