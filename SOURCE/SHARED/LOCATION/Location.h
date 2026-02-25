@@ -20,6 +20,10 @@ public:
     std::string getParentLocationID();
     std::string getInterceptingZoneID(int x, int y);
 
+    void addChildLocation(std::string childLocation);
+    void addZone(Zone zone);
+    std::vector<std::string> getChildLocations();
+    std::vector<Zone> getZones();
 private:
     std::string mLocationID = "";
     std::string mParentLocationID = "";

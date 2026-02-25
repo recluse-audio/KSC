@@ -21,6 +21,26 @@ std::string Location::getParentLocationID()
     return mParentLocationID;
 }
 
+void Location::addChildLocation(std::string childLocation)
+{
+    mChildLocations.push_back(childLocation);
+}
+
+void Location::addZone(Zone zone)
+{
+    mZones.push_back(zone);
+}
+
+std::vector<std::string> Location::getChildLocations()
+{
+    return mChildLocations;
+}
+
+std::vector<Zone> Location::getZones()
+{
+    return mZones;
+}
+
 std::string Location::getInterceptingZoneID(int x, int y)
 {
     std::string interceptingZoneID = "";
