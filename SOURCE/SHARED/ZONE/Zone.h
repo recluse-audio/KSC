@@ -21,6 +21,14 @@ public:
         int mW = 0;
         int mH = 0;
 
+        Bounds(int x, int y, int w, int h)
+        : mX(x)
+        , mY(y)
+        , mW(w)
+        , mH(h)
+        {
+        }
+
         Bounds(const Bounds& other)
         : mX(other.mX)
         , mY(other.mY)
