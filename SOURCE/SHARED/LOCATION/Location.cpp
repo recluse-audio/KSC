@@ -11,6 +11,11 @@ std::string Location::getLocationID()
     return mLocationID;
 }
 
+void Location::setLocationID(std::string locationID)
+{
+    mLocationID = locationID;
+}
+
 std::string Location::getParentLocationID()
 {
     return mParentLocationID;

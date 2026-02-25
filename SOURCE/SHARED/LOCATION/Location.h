@@ -16,6 +16,7 @@ public:
     Location(std::string locationID, std::string parentID = "Main");
 
     std::string getLocationID();
+    void setLocationID(std::string locationID);
     std::string getParentLocationID();
     std::string getInterceptingZoneID(int x, int y);
 
