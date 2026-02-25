@@ -1,0 +1,5 @@
+set(KSC_SOURCES
+    SOURCE/SHARED/LOCATION/Location.cpp
+    SOURCE/SHARED/LOCATION/Location.h
+    SOURCE/SHARED/ZONE/Zone.h
+)
