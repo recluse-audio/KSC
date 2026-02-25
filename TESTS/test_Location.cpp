@@ -10,6 +10,21 @@ TEST_CASE("Location getLocationID", "[Location]")
     }
 }
 
+TEST_CASE("Location getParentLocationID", "[Location]")
+{
+    SECTION("returns the parent ID passed at construction")
+    {
+        Location loc("MyLocation", "ParentLocation");
+        REQUIRE(loc.getParentLocationID() == "ParentLocation");
+    }
+
+    SECTION("defaults to Main when no parent ID is provided")
+    {
+        Location loc("MyLocation");
+        REQUIRE(loc.getParentLocationID() == "Main");
+    }
+}
+
 TEST_CASE("Location setLocationID", "[Location]")
 {
     Location loc("InitialID");
