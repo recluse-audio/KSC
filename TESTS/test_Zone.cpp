@@ -1,12 +1,12 @@
 #include <catch2/catch_test_macros.hpp>
-#include "LOCATION/Location.h"
+#include "SCENE/Scene.h"
 
 // Bounds: x=10, y=20, w=100, h=50  →  x: [10, 110]  y: [20, 70]
 TEST_CASE("Zone containsPoint", "[Zone]")
 {
-    Location loc("TestLocation");
+    Scene scene("TestScene");
     Zone::Bounds bounds(10, 20, 100, 50);
-    Zone zone(loc, bounds, "TestZone");
+    Zone zone(scene, bounds, "TestZone");
 
     SECTION("point inside returns true")
     {
@@ -56,18 +56,18 @@ TEST_CASE("Zone containsPoint", "[Zone]")
 
 TEST_CASE("Zone getZoneID", "[Zone]")
 {
-    Location loc("TestLocation");
+    Scene scene("TestScene");
     Zone::Bounds bounds(0, 0, 100, 100);
 
     SECTION("returns the ID passed at construction")
     {
-        Zone zone(loc, bounds, "MyZone");
+        Zone zone(scene, bounds, "MyZone");
         REQUIRE(zone.getZoneID() == "MyZone");
     }
 
     SECTION("returns default ID when none provided")
     {
-        Zone zone(loc, bounds);
+        Zone zone(scene, bounds);
         REQUIRE(zone.getZoneID() == "Default Zone ID");
     }
 }

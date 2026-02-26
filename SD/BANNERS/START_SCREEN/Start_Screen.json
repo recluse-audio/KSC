@@ -1,0 +1,18 @@
+{
+  "id": "START_SCREEN",
+  "name": "Kasota Stone Conspiracy",
+  "type": "banner",
+  "primary_path": "/BANNERS/START_SCREEN/Start_Screen_320x240.png",
+  "secondary_path": "/BANNERS/START_SCREEN/Start_Screen_Summary.md",
+  "zones": [
+    {
+      "id": "start_button",
+      "label": "Start",
+      "x": 100,
+      "y": 140,
+      "width": 100,
+      "height": 35,
+      "target": "/LOCATIONS/DESK/MAIN/Desk_Full.json"
+    }
+  ]
+}

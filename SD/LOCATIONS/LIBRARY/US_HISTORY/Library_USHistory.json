@@ -1,0 +1,9 @@
+{
+  "id": "LIBRARY_USHISTORY",
+  "name": "Library - US History",
+  "parent": "LIBRARY",
+  "primary_path": "/LOCATIONS/LIBRARY/US_HISTORY/Library_USHistory_Section_320x240.png",
+  "secondary_path": "/LOCATIONS/LIBRARY/US_HISTORY/Library_USHistory_Summary.md",
+  "items": [],
+  "zones": []
+}

@@ -5,9 +5,9 @@
 #pragma once
 #include <string>
 
-class Location; // forward declaration - only a reference is needed
+class Scene; // forward declaration - only a reference is needed
 /**
- * Hit area (bounds) within an associated location
+ * Hit area (bounds) within an associated scene
  */
 class Zone
 {
@@ -38,13 +38,7 @@ public:
         }
     };
 
-    Zone(Location& location, Bounds bounds, std::string zoneID = "Default Zone ID") 
-    : mLocation(location)
-    , mBounds(bounds)
-    , mZoneID(zoneID)
-    {
-
-    }
+    Zone(Scene& scene, Bounds bounds, std::string zoneID = "Default Zone ID", std::string target = "");
 
     bool containsPoint(int x, int y)
     {
@@ -58,9 +52,12 @@ public:
         return doesContain;
     }
 
-    const std::string getZoneID () { return mZoneID; }
-private: 
-    Location& mLocation;
+    const std::string getZoneID()  { return mZoneID; }
+    const std::string getSceneID() { return mSceneID; }
+    const std::string getTarget()  { return mTarget; }
+private:
+    std::string mSceneID; // ID of the scene this zone belongs to
     Bounds mBounds;
-    std::string mZoneID = "";
+    std::string mZoneID  = "";
+    std::string mTarget  = ""; // SD-relative path of the scene to load on hit
 };
