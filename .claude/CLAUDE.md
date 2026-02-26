@@ -46,7 +46,7 @@ SOURCE/SHARED/          # Portable game logic (C++17, no platform dependencies)
 TESTS/
     test_Zone.cpp       # Zone hit detection tests
     test_Scene.cpp      # Scene tests
-SD/
+KSC_DATA/
     Game_State.json     # Runtime state: currentMode, currentLocation, currentNote
     LOCATIONS/          # Location scene data (JSON + images)
     NOTES/              # Note scene data (JSON + images)
@@ -76,11 +76,11 @@ Clues are JSON objects nested inside location JSON files under a `clues` array. 
 ```
 
 - `isDiscovered` defaults to `false`; set to `true` when the player finds the clue
-- `unlocksNote` is the `id` of the Note in `SD/NOTES/` that this clue reveals
+- `unlocksNote` is the `id` of the Note in `KSC_DATA/NOTES/` that this clue reveals
 
 ### Zone Target Paths
 
-The `target` field on a zone is an exact path with SD treated as root:
+The `target` field on a zone is an exact path with KSC_DATA treated as root:
 
 ```json
 { "target": "/BANNERS/START_SCREEN/Start_Screen.json" }
@@ -92,7 +92,7 @@ The `target` field on a zone is an exact path with SD treated as root:
 
 ### Design Philosophy
 
-**Memory model:** on scene change, the incoming scene's JSON is loaded and held in memory. Images and text files are read from SD individually on demand — not pre-loaded or cached. Only one scene JSON resides in memory at a time.
+**Memory model:** on scene change, the incoming scene's JSON is loaded and held in memory. Images and text files are read from KSC_DATA individually on demand — not pre-loaded or cached. Only one scene JSON resides in memory at a time.
 
 Keep shared source free of platform dependencies so it can be tested on desktop and run on ESP32.
 

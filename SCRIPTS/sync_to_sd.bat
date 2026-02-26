@@ -2,15 +2,15 @@
 REM Sync KSC game files from repo to D:\KSC\ (SD card staging)
 REM Uses robocopy for efficient mirroring (only copies changed files)
 
-set SOURCE=C:\REPOS\PROJECTS\ESP32_TFT\KSC\SD
-set DEST=D:\KSC
+set SOURCE=C:\REPOS\PROJECTS\KSC\KSC_DATA
+set DEST=D:\KSC_DATA
 
-echo Syncing KSC/SD/ files to SD card...
+echo Syncing KSC/KSC_DATA/ files to SD card...
 echo Source: %SOURCE%
 echo Dest:   %DEST%
 echo.
 
-REM Mirror everything in KSC/SD/ to D:/KSC/
+REM Mirror everything in KSC/KSC_DATA/ to D:/KSC_DATA/
 robocopy "%SOURCE%" "%DEST%" /MIR /XF *.ino *.cpp *.h .gitignore /XD .git /R:1 /W:1 /NP
 
 echo.

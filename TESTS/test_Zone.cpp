@@ -71,3 +71,4 @@ TEST_CASE("Zone getZoneID", "[Zone]")
         REQUIRE(zone.getZoneID() == "Default Zone ID");
     }
 }
+

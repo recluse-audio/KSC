@@ -32,6 +32,13 @@ public:
     std::string getSecondaryPath()  const;
     std::string getInterceptingZoneID(int x, int y)     const;
     std::string getInterceptingZoneTarget(int x, int y) const;
+    bool        isRoot()                                const;
+    void        setIsRoot(bool isRoot);
+    bool        isDiscovered()                          const;
+    void        setIsDiscovered(bool discovered);
+    std::string getParentPath()                         const;
+    void        setParentPath(std::string path);
+    std::string getInterceptingZoneNoteTarget(int x, int y) const;
 
     void addChildScene(std::string childScene);
     void addZone(Zone zone);
@@ -43,6 +50,9 @@ private:
     std::string mName           = "";
     std::string mPrimaryPath    = ""; // PNG for locations, markdown for notes
     std::string mSecondaryPath  = ""; // markdown for locations, PNG for notes (optional)
+    bool        mIsRoot         = false;
+    bool        mIsDiscovered   = false;
+    std::string mParentPath     = "";
     std::vector<std::string> mChildScenes;
     std::vector<Zone> mZones;
 };

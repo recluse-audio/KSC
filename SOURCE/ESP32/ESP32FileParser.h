@@ -27,4 +27,14 @@ public:
         file.close();
         return content;
     }
+
+    void writeToFile(const std::string& path, const std::string& content) override
+    {
+        File file = SD.open(path.c_str(), FILE_WRITE);
+        if (file)
+        {
+            file.print(content.c_str());
+            file.close();
+        }
+    }
 };

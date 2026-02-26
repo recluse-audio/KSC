@@ -38,7 +38,7 @@ public:
         }
     };
 
-    Zone(Scene& scene, Bounds bounds, std::string zoneID = "Default Zone ID", std::string target = "");
+    Zone(Scene& scene, Bounds bounds, std::string zoneID = "Default Zone ID", std::string target = "", std::string noteTarget = "");
 
     bool containsPoint(int x, int y)
     {
@@ -52,12 +52,14 @@ public:
         return doesContain;
     }
 
-    const std::string getZoneID()  { return mZoneID; }
-    const std::string getSceneID() { return mSceneID; }
-    const std::string getTarget()  { return mTarget; }
+    const std::string getZoneID()     { return mZoneID; }
+    const std::string getSceneID()    { return mSceneID; }
+    const std::string getTarget()     { return mTarget; }
+    const std::string getNoteTarget() { return mNoteTarget; }
 private:
-    std::string mSceneID; // ID of the scene this zone belongs to
+    std::string mSceneID;    // ID of the scene this zone belongs to
     Bounds mBounds;
-    std::string mZoneID  = "";
-    std::string mTarget  = ""; // SD-relative path of the scene to load on hit
+    std::string mZoneID     = "";
+    std::string mTarget     = ""; // data-root-relative path of the scene to navigate to on hit
+    std::string mNoteTarget = ""; // data-root-relative path of the note to mark discovered on hit (no navigation)
 };

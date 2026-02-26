@@ -1,0 +1,47 @@
+{
+  "id": "DESK_COMPUTER",
+  "name": "Computer",
+  "parent": "DESK_MAIN",
+  "parent_path": "/LOCATIONS/DESK/MAIN/Desk_Full.json",
+  "isDiscovered": true,
+  "primary_path": "/LOCATIONS/DESK/COMPUTER/Desk_Terminal_Login_320x240.png",
+  "secondary_path": "/LOCATIONS/DESK/COMPUTER/Computer_Summary.md",
+  "password": "kittens123",
+  "items": [],
+  "subdirectories": [
+    "FILES",
+    "PROGRAMS"
+  ],
+  "zones": [
+    {
+      "id": "files_dir",
+      "label": "Files",
+      "x": 40,
+      "y": 80,
+      "width": 100,
+      "height": 40,
+      "action": "navigate",
+      "target": "/LOCATIONS/DESK/COMPUTER/FILES/Files.json"
+    },
+    {
+      "id": "programs_dir",
+      "label": "Programs",
+      "x": 40,
+      "y": 130,
+      "width": 100,
+      "height": 40,
+      "action": "navigate",
+      "target": "/LOCATIONS/DESK/COMPUTER/PROGRAMS/Programs.json"
+    },
+    {
+      "id": "back_to_desk",
+      "label": "Back to Desk",
+      "x": 10,
+      "y": 200,
+      "width": 80,
+      "height": 30,
+      "action": "navigate",
+      "target": "/LOCATIONS/DESK/MAIN/Desk_Full.json"
+    }
+  ]
+}

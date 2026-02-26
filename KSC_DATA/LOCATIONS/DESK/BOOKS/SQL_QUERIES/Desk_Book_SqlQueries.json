@@ -1,0 +1,10 @@
+{
+  "id": "DESK_BOOK_SQL_QUERIES",
+  "name": "SQL Queries",
+  "parent": "DESK_BOOKS",
+  "parent_path": "/LOCATIONS/DESK/BOOKS/Books.json",
+  "isDiscovered": true,
+  "primary_path": "/LOCATIONS/DESK/BOOKS/SQL_QUERIES/Desk_Book_SqlQueries_320x240.png",
+  "secondary_path": "/LOCATIONS/DESK/BOOKS/SQL_QUERIES/Desk_Book_SqlQueries_Summary.md",
+  "zones": []
+}

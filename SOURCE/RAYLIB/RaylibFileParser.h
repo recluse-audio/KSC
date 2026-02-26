@@ -11,9 +11,9 @@
  * Desktop (Raylib) implementation of FileParser.
  * Reads files from the local filesystem using std::ifstream.
  *
- * Paths are SD-root-relative (e.g. "/LOCATIONS/DESK/MAIN/Desk_Full.json").
- * The "SD" directory in the working directory is treated as the SD root,
- * so a leading '/' is replaced with "SD/".
+ * Paths are data-root-relative (e.g. "/LOCATIONS/DESK/MAIN/Desk_Full.json").
+ * The "KSC_DATA" directory in the working directory is treated as the data root,
+ * so a leading '/' is replaced with "KSC_DATA/".
  */
 class RaylibFileParser : public FileParser
 {
@@ -30,11 +30,18 @@ public:
         return buffer.str();
     }
 
+    void writeToFile(const std::string& path, const std::string& content) override
+    {
+        std::ofstream file(sdPath(path));
+        if (file.is_open())
+            file << content;
+    }
+
 private:
     static std::string sdPath(const std::string& path)
     {
         if (!path.empty() && path[0] == '/')
-            return "SD" + path;
+            return "KSC_DATA" + path;
         return path;
     }
 };

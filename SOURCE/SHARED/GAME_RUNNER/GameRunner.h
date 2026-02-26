@@ -6,39 +6,41 @@
 #include <string>
 #include <memory>
 #include "../SCENE/SceneFactory.h"
+#include "../SCENE_VIEW/SceneView.h"
+#include "../CONTROLS_VIEW/ControlsView.h"
 
 class FileParser;
-class SceneRunner;
+class GraphicsRenderer;
 class Scene;
 
 /**
- * Owns the active game state (mode, current location/note IDs) and the
- * active Scene. Uses an injected FileParser to load scene JSON from storage
- * and a SceneFactory to build the Scene from that string. Delegates all
- * rendering to an injected SceneRunner.
+ * Owns the active game state and the active Scene. Uses an injected FileParser
+ * to load scene JSON from storage and a SceneFactory to build the Scene.
+ * Delegates scene rendering to SceneView and controls rendering to ControlsView,
+ * both of which use an injected GraphicsRenderer.
  */
 class GameRunner
 {
 public:
-    GameRunner(FileParser& fileParser,
-               SceneRunner& sceneRunner,
-               std::string mode       = "locations",
-               std::string locationID = "",
-               std::string noteID     = "");
+    GameRunner(FileParser&       fileParser,
+               GraphicsRenderer& renderer,
+               std::string       mode       = "locations",
+               std::string       locationID = "",
+               std::string       noteID     = "");
 
     /**
-     * Render the active scene via the SceneRunner.
+     * Render the active scene and controls via their respective views.
      */
     void draw();
 
     /**
      * Called by platform input callbacks when the user taps/clicks at (x, y).
-     * Uses the active scene's zones to resolve the hit.
+     * Checks control buttons first, then zone hit-testing on the active scene.
      */
     void registerHit(int x, int y);
 
     /**
-     * Load a scene from the given SD-relative JSON path, build it via
+     * Load a scene from the given data-root-relative JSON path, build it via
      * SceneFactory, and take ownership as the new active scene.
      */
     void loadScene(const std::string& path);
@@ -48,12 +50,19 @@ public:
     std::string getCurrentNoteID()     const;
 
 private:
-    FileParser&  mFileParser;
-    SceneRunner& mSceneRunner;
-    SceneFactory mSceneFactory;
+    FileParser&            mFileParser;
+    GraphicsRenderer&      mRenderer;
+    SceneView              mSceneView;
+    ControlsView           mControlsView;
+    SceneFactory           mSceneFactory;
     std::unique_ptr<Scene> mActiveScene;
+    bool                   mOverlayVisible = false;
 
     std::string mCurrentMode;
     std::string mCurrentLocationID;
     std::string mCurrentNoteID;
+
+    void discoverNote(const std::string& notePath);
+    void dispatchCallback(const std::string& callbackId);
+    void syncControlsState();
 };

@@ -45,7 +45,8 @@ if(BUILD_RAYLIB)
 
     add_executable(KSC_Raylib
         SOURCE/RAYLIB/main.cpp
-        SOURCE/RAYLIB/RaylibSceneRunner.cpp
+        SOURCE/RAYLIB/RaylibGraphicsRenderer.cpp
+        SOURCE/SHARED/SCENE/nanosvg_impl.cpp
         ${KSC_SOURCES}
     )
 

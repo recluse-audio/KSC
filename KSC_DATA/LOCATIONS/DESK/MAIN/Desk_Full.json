@@ -1,0 +1,36 @@
+{
+  "id": "DESK_MAIN",
+  "name": "Desk",
+  "parent": "Main",
+  "isRoot": true,
+  "isDiscovered": true,
+  "primary_path": "/LOCATIONS/DESK/MAIN/Desk_Full_320x240.png",
+  "secondary_path": "/LOCATIONS/DESK/MAIN/Desk_Full_Summary.md",
+  "items": [],
+  "sections": [
+    "BOOKS",
+    "COMPUTER"
+  ],
+  "zones": [
+    {
+      "id": "computer_section",
+      "label": "Computer",
+      "x": 20,
+      "y": 60,
+      "width": 110,
+      "height": 120,
+      "action": "navigate",
+      "target": "/LOCATIONS/DESK/COMPUTER/Computer.json"
+    },
+    {
+      "id": "books_section",
+      "label": "Books",
+      "x": 140,
+      "y": 80,
+      "width": 140,
+      "height": 120,
+      "action": "navigate",
+      "target": "/LOCATIONS/DESK/BOOKS/Books.json"
+    }
+  ]
+}

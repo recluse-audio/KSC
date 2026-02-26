@@ -17,6 +17,9 @@ std::unique_ptr<Scene> SceneFactory::build(const std::string& jsonString)
     std::string secondaryPath = j.value("secondary_path", "");
 
     auto scene = std::make_unique<Scene>(sceneID, parentID, name, primaryPath, secondaryPath);
+    scene->setIsRoot(j.value("isRoot", false));
+    scene->setIsDiscovered(j.value("isDiscovered", false));
+    scene->setParentPath(j.value("parent_path", ""));
 
     if (j.contains("zones") && j["zones"].is_array())
     {
@@ -28,7 +31,10 @@ std::unique_ptr<Scene> SceneFactory::build(const std::string& jsonString)
                 z.value("width",  0),
                 z.value("height", 0)
             );
-            scene->addZone(Zone(*scene, bounds, z.value("id", ""), z.value("target", "")));
+            scene->addZone(Zone(*scene, bounds,
+                               z.value("id", ""),
+                               z.value("target", ""),
+                               z.value("noteTarget", "")));
         }
     }
 

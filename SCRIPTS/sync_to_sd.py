@@ -2,8 +2,8 @@
 """
 Sync KSC game files from repo to SD card (KSC_SD volume).
 
-The repo is the source of truth. This script copies the SD folder structure
-to the SD card, preserving the /SD/ path.
+The repo is the source of truth. This script copies the KSC_DATA folder structure
+to the SD card, preserving the /KSC_DATA/ path.
 
 Usage:
     python SCRIPTS/sync_to_sd.py
@@ -17,7 +17,7 @@ import os
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).parent.parent
-SOURCE    = REPO_ROOT / "KSC" / "SD"
+SOURCE    = REPO_ROOT / "KSC_DATA"
 
 def find_sd_card():
     """Find the drive letter for volume named KSC_SD."""
@@ -42,8 +42,8 @@ def find_sd_card():
                     # Try to read volume name via dir command (less reliable)
                     print(f"  Checking {drive}")
                     # For now, just check if SD folder exists as a hint
-                    if os.path.exists(f"{drive}SD"):
-                        response = input(f"  Found SD folder at {drive}. Is this KSC_SD? (y/n): ")
+                    if os.path.exists(f"{drive}KSC_DATA"):
+                        response = input(f"  Found KSC_DATA folder at {drive}. Is this KSC_SD? (y/n): ")
                         if response.lower() == 'y':
                             return Path(drive)
     return None
@@ -130,8 +130,8 @@ def main():
         print("Please ensure SD card is inserted and named 'KSC_SD'")
         return
 
-    # Mirror the SD folder structure on the SD card
-    DEST = sd_drive / "SD"
+    # Mirror the KSC_DATA folder structure on the SD card
+    DEST = sd_drive / "KSC_DATA"
 
     print(f"Source: {SOURCE}")
     print(f"Dest:   {DEST}")

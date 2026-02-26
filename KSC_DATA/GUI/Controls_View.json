@@ -1,0 +1,46 @@
+{
+  "buttons": [
+    {
+      "id": "info_button",
+      "x": 5, "y": 5, "w": 10, "h": 10,
+      "icon": "ASSETS/DRAWINGS/Info_Button.svg",
+      "callback": "toggleOverlay",
+      "visibleWhen": "always"
+    },
+    {
+      "id": "up_arrow",
+      "x": 305, "y": 5, "w": 10, "h": 10,
+      "icon": "ASSETS/DRAWINGS/Up_Arrow.svg",
+      "callback": "navigateUp",
+      "visibleWhen": "nonRoot"
+    },
+    {
+      "id": "left_arrow",
+      "x": 5, "y": 225, "w": 10, "h": 10,
+      "icon": "ASSETS/DRAWINGS/Left_Arrow.svg",
+      "callback": "navigatePrev",
+      "visibleWhen": "root"
+    },
+    {
+      "id": "locations_icon",
+      "x": 147, "y": 225, "w": 10, "h": 10,
+      "icon": "ASSETS/DRAWINGS/Locations_Icon.svg",
+      "callback": "switchToLocations",
+      "visibleWhen": "root"
+    },
+    {
+      "id": "notes_icon",
+      "x": 162, "y": 225, "w": 10, "h": 10,
+      "icon": "ASSETS/DRAWINGS/Notes_Icon.svg",
+      "callback": "switchToNotes",
+      "visibleWhen": "root"
+    },
+    {
+      "id": "right_arrow",
+      "x": 305, "y": 225, "w": 10, "h": 10,
+      "icon": "ASSETS/DRAWINGS/Right_Arrow.svg",
+      "callback": "navigateNext",
+      "visibleWhen": "root"
+    }
+  ]
+}

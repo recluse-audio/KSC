@@ -20,4 +20,9 @@ public:
      * Returns an empty string if the file cannot be opened.
      */
     virtual std::string load(const std::string& path) = 0;
+
+    /**
+     * Write content to the file at the given path, overwriting any existing data.
+     */
+    virtual void writeToFile(const std::string& path, const std::string& content) = 0;
 };

@@ -1,9 +1,0 @@
-{
-  "id": "LIBRARY_BIOGRAPHY",
-  "name": "Library - Biography",
-  "parent": "LIBRARY",
-  "primary_path": "/LOCATIONS/LIBRARY/BIOGRAPHY/Library_Biography_Section_320x240.png",
-  "secondary_path": "/LOCATIONS/LIBRARY/BIOGRAPHY/Library_Biography_Summary.md",
-  "items": [],
-  "zones": []
-}

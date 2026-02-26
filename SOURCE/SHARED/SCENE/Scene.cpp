@@ -41,6 +41,21 @@ std::string Scene::getInterceptingZoneID(int x, int y) const
     return "";
 }
 
+bool Scene::isRoot()                    const { return mIsRoot; }
+void Scene::setIsRoot(bool isRoot)            { mIsRoot = isRoot; }
+bool Scene::isDiscovered()              const { return mIsDiscovered; }
+void Scene::setIsDiscovered(bool d)           { mIsDiscovered = d; }
+std::string Scene::getParentPath()      const { return mParentPath; }
+void Scene::setParentPath(std::string path)   { mParentPath = path; }
+
+std::string Scene::getInterceptingZoneNoteTarget(int x, int y) const
+{
+    for (auto zone : mZones)
+        if (zone.containsPoint(x, y))
+            return zone.getNoteTarget();
+    return "";
+}
+
 std::string Scene::getInterceptingZoneTarget(int x, int y) const
 {
     for (auto zone : mZones)
