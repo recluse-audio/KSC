@@ -1,11 +1,11 @@
 {
   "id": "LIBRARY",
   "name": "Library",
-  "parent": "Main",
+  "parent": "Root",
   "isRoot": true,
   "isDiscovered": true,
-  "primary_path": "/LOCATIONS/LIBRARY/MAIN/Library_Main_320x240.png",
-  "secondary_path": "/LOCATIONS/LIBRARY/MAIN/Library_Summary.md",
+  "primary_path": "/LOCATIONS/LIBRARY/ROOT/Library_Main_320x240.png",
+  "secondary_path": "/LOCATIONS/LIBRARY/ROOT/Library_Summary.md",
   "items": [],
   "sections": [
     "LIBRARY_BIOGRAPHY",

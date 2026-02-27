@@ -1,0 +1,24 @@
+{
+  "currentMode": "locations",
+  "currentLocation": "",
+  "currentNote": "",
+  "avery_desk_locations": {
+    "/LOCATIONS/AVERY_DESK/ROOT/Avery_Desk_Full.json": true,
+    "/LOCATIONS/AVERY_DESK/BOOKS/Books.json": true,
+    "/LOCATIONS/AVERY_DESK/BOOKS/INFINITE_JEST/Avery_Desk_Books_Infinite_Jest.json": true,
+    "/LOCATIONS/AVERY_DESK/BOOKS/LOW_LATENCY_DSP/Avery_Desk_Books_Low_Latency_DSP.json": true,
+    "/LOCATIONS/AVERY_DESK/BOOKS/SQL_QUERIES/Avery_Desk_Books_SQL_Queries.json": true,
+    "/LOCATIONS/AVERY_DESK/COMPUTER/Computer.json": true,
+    "/LOCATIONS/AVERY_DESK/COMPUTER/FILES/Files.json": true,
+    "/LOCATIONS/AVERY_DESK/COMPUTER/PROGRAMS/Programs.json": true
+  },
+  "library_locations": {
+    "/LOCATIONS/LIBRARY/ROOT/Library.json": true,
+    "/LOCATIONS/LIBRARY/BIOGRAPHY/Library_Biography.json": true,
+    "/LOCATIONS/LIBRARY/US_HISTORY/Library_USHistory.json": true
+  },
+  "avery_desk_note": {
+    "/NOTES/AVERY_DESK/ROOT/Averys_Login_History.json": false,
+    "/NOTES/AVERY_DESK/BOOKS/INFINITE_JEST/Avery_Infinite_Jest.json": false
+  }
+}

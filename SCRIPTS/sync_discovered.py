@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
 """
-Sync the 'discovered' map in KSC_DATA/Game_State.json against all scene JSONs in KSC_DATA/.
+Sync the discovered maps in KSC_DATA/GAME_STATE/Game_State.json against all scene JSONs.
 
-Every JSON in KSC_DATA/ that contains an 'isDiscovered' field is treated as a
-discoverable scene.  The field's value in the JSON is the factory default
-(some locations start as true, notes typically start as false).
+Every JSON with an 'isDiscovered' field is a discoverable scene. Scenes are
+grouped by subject area, derived from their path:
+
+    /LOCATIONS/DESK/…      -> "desk_locations"
+    /LOCATIONS/LIBRARY/…   -> "library_locations"
+    /NOTES/<FOLDER>/…      -> "<folder_lowercase>_note"
+
+Within each group, scenes with 'isRoot: true' are listed first.
 
 Usage:
     python SCRIPTS/sync_discovered.py           # add new, drop deleted, keep runtime values
@@ -16,70 +21,105 @@ import sys
 from pathlib import Path
 
 ROOT            = Path(__file__).parent.parent
-SD_ROOT         = ROOT / "KSC_DATA"
-GAME_STATE_PATH = SD_ROOT / "Game_State.json"
+DATA_ROOT       = ROOT / "KSC_DATA"
+GAME_STATE_PATH = DATA_ROOT / "GAME_STATE" / "Game_State.json"
 
 
-def sd_key(path: Path) -> str:
+def data_key(path: Path) -> str:
     """KSC_DATA/LOCATIONS/DESK/MAIN/Desk_Full.json -> /LOCATIONS/DESK/MAIN/Desk_Full.json"""
-    return "/" + path.relative_to(SD_ROOT).as_posix()
+    return "/" + path.relative_to(DATA_ROOT).as_posix()
 
 
-def scan_defaults() -> dict[str, bool]:
-    """Return {sd_key: default_bool} for every JSON in KSC_DATA/ that has 'isDiscovered'."""
+def group_for(key: str) -> str:
+    """Derive the group name from a data-root-relative path."""
+    parts = key.strip("/").split("/")
+    if parts[0] == "LOCATIONS" and len(parts) >= 2:
+        return parts[1].lower() + "_locations"
+    if parts[0] == "NOTES" and len(parts) >= 2:
+        return parts[1].lower() + "_note"
+    return "misc"
+
+
+def scan_defaults() -> dict[str, tuple[bool, bool]]:
+    """Return {key: (isDiscovered_default, isRoot)} for every discoverable scene JSON."""
     defaults = {}
-    for json_file in sorted(SD_ROOT.rglob("*.json")):
+    for json_file in sorted(DATA_ROOT.rglob("*.json")):
         if json_file == GAME_STATE_PATH:
             continue
         try:
             data = json.loads(json_file.read_text(encoding="utf-8"))
         except (json.JSONDecodeError, OSError):
             continue
-        if "isDiscovered" in data:
-            defaults[sd_key(json_file)] = bool(data["isDiscovered"])
+        if "isDiscovered" not in data:
+            continue
+        key = data_key(json_file)
+        defaults[key] = (bool(data["isDiscovered"]), bool(data.get("isRoot", False)))
     return defaults
+
+
+def sort_group(entries: dict[str, bool], defaults: dict[str, tuple[bool, bool]]) -> dict[str, bool]:
+    """Return entries sorted with isRoot scenes first, then alphabetically."""
+    def sort_key(k):
+        is_root = defaults.get(k, (False, False))[1]
+        return (0 if is_root else 1, k)
+    return {k: entries[k] for k in sorted(entries, key=sort_key)}
 
 
 def main() -> None:
     reset = "--reset" in sys.argv
 
     game_state = json.loads(GAME_STATE_PATH.read_text(encoding="utf-8"))
-    existing   = game_state.get("discovered", {})
     defaults   = scan_defaults()
 
+    # Flatten all existing groups into one lookup: key -> value
+    existing: dict[str, bool] = {}
+    for v in game_state.values():
+        if isinstance(v, dict):
+            existing.update(v)
+
+    added   = []
+    removed = []
+    merged: dict[str, dict[str, bool]] = {}
+
     if reset:
-        merged = dict(defaults)
-        print(f"Reset: {len(merged)} entries restored to defaults.")
+        for key, (default, _) in defaults.items():
+            group = group_for(key)
+            merged.setdefault(group, {})[key] = default
+        total = sum(len(v) for v in merged.values())
+        print(f"Reset: {total} entries restored to defaults.")
     else:
-        merged  = {}
-        added   = []
-        removed = []
+        for key, (default, _) in defaults.items():
+            group = group_for(key)
+            merged.setdefault(group, {})[key] = existing[key] if key in existing else default
+            if key not in existing:
+                added.append((key, group, default))
 
-        for path, default in defaults.items():
-            if path in existing:
-                merged[path] = existing[path]
-            else:
-                merged[path] = default
-                added.append(path)
-
-        for path in existing:
-            if path not in defaults:
-                removed.append(path)
+        for key in existing:
+            if key not in defaults:
+                removed.append(key)
 
         if added:
             print(f"Added   ({len(added)}):")
-            for p in added:
-                print(f"  {p}  [default={defaults[p]}]")
+            for key, group, default in added:
+                print(f"  [{group}] {key}  [default={default}]")
         if removed:
             print(f"Removed ({len(removed)}):")
-            for p in removed:
-                print(f"  {p}")
+            for key in removed:
+                print(f"  {key}")
         if not added and not removed:
-            print(f"Up to date — {len(merged)} discoverable scenes tracked.")
+            total = sum(len(v) for v in merged.values())
+            print(f"Up to date — {total} discoverable scenes tracked.")
 
-    game_state["discovered"] = merged
+    # Sort each group: root entries first, then alphabetical
+    for group in merged:
+        merged[group] = sort_group(merged[group], defaults)
+
+    # Write back: preserve non-dict fields, replace group dicts
+    output = {k: v for k, v in game_state.items() if not isinstance(v, dict)}
+    output.update(merged)
+
     GAME_STATE_PATH.write_text(
-        json.dumps(game_state, indent=2) + "\n",
+        json.dumps(output, indent=2) + "\n",
         encoding="utf-8"
     )
 

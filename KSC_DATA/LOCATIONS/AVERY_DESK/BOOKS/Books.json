@@ -1,0 +1,46 @@
+{
+  "id": "AVERY_DESK_BOOKS",
+  "name": "Books",
+  "parent": "AVERY_DESK_ROOT",
+  "parent_path": "/LOCATIONS/AVERY_DESK/ROOT/Avery_Desk_Full.json",
+  "isDiscovered": true,
+  "primary_path": "/LOCATIONS/AVERY_DESK/BOOKS/Avery_Desk_Books_320x240.png",
+  "secondary_path": "/LOCATIONS/AVERY_DESK/BOOKS/Books_Summary.md",
+  "items": [
+    "Avery_Desk_Books_Low_Latency_DSP",
+    "Avery_Desk_Books_Infinite_Jest",
+    "Avery_Desk_Books_SQL_Queries"
+  ],
+  "zones": [
+    {
+      "id": "book_dsp",
+      "label": "DSP Book",
+      "x": 0,
+      "y": 30,
+      "width": 107,
+      "height": 210,
+      "action": "navigate",
+      "target": "/LOCATIONS/AVERY_DESK/BOOKS/LOW_LATENCY_DSP/Avery_Desk_Books_Low_Latency_DSP.json"
+    },
+    {
+      "id": "book_sql",
+      "label": "SQL Book",
+      "x": 107,
+      "y": 30,
+      "width": 106,
+      "height": 210,
+      "action": "navigate",
+      "target": "/LOCATIONS/AVERY_DESK/BOOKS/SQL_QUERIES/Avery_Desk_Books_SQL_Queries.json"
+    },
+    {
+      "id": "book_infinitejest",
+      "label": "Infinite Jest",
+      "x": 213,
+      "y": 30,
+      "width": 107,
+      "height": 210,
+      "action": "navigate",
+      "target": "/LOCATIONS/AVERY_DESK/BOOKS/INFINITE_JEST/Avery_Desk_Books_Infinite_Jest.json"
+    }
+  ]
+}

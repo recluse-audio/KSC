@@ -1,11 +1,11 @@
 {
-  "id": "DESK_COMPUTER",
+  "id": "AVERY_DESK_COMPUTER",
   "name": "Computer",
-  "parent": "DESK_MAIN",
-  "parent_path": "/LOCATIONS/DESK/MAIN/Desk_Full.json",
+  "parent": "AVERY_DESK_ROOT",
+  "parent_path": "/LOCATIONS/AVERY_DESK/ROOT/Avery_Desk_Full.json",
   "isDiscovered": true,
-  "primary_path": "/LOCATIONS/DESK/COMPUTER/Desk_Terminal_Login_320x240.png",
-  "secondary_path": "/LOCATIONS/DESK/COMPUTER/Computer_Summary.md",
+  "primary_path": "/LOCATIONS/AVERY_DESK/COMPUTER/Avery_Desk_Terminal_Login_320x240.png",
+  "secondary_path": "/LOCATIONS/AVERY_DESK/COMPUTER/Computer_Summary.md",
   "password": "kittens123",
   "items": [],
   "subdirectories": [
@@ -21,7 +21,7 @@
       "width": 100,
       "height": 40,
       "action": "navigate",
-      "target": "/LOCATIONS/DESK/COMPUTER/FILES/Files.json"
+      "target": "/LOCATIONS/AVERY_DESK/COMPUTER/FILES/Files.json"
     },
     {
       "id": "programs_dir",
@@ -31,7 +31,7 @@
       "width": 100,
       "height": 40,
       "action": "navigate",
-      "target": "/LOCATIONS/DESK/COMPUTER/PROGRAMS/Programs.json"
+      "target": "/LOCATIONS/AVERY_DESK/COMPUTER/PROGRAMS/Programs.json"
     },
     {
       "id": "back_to_desk",
@@ -41,7 +41,7 @@
       "width": 80,
       "height": 30,
       "action": "navigate",
-      "target": "/LOCATIONS/DESK/MAIN/Desk_Full.json"
+      "target": "/LOCATIONS/AVERY_DESK/ROOT/Avery_Desk_Full.json"
     }
   ]
 }

@@ -1,0 +1,22 @@
+{
+  "id": "AVERY_AVERY_DESK_COMPUTER_FILES",
+  "name": "Files",
+  "parent": "AVERY_DESK_COMPUTER",
+  "parent_path": "/LOCATIONS/AVERY_DESK/COMPUTER/Computer.json",
+  "isDiscovered": true,
+  "primary_path": "/LOCATIONS/AVERY_DESK/COMPUTER/FILES/Avery_Desk_Computer_Files_320x240.png",
+  "secondary_path": "/LOCATIONS/AVERY_DESK/COMPUTER/FILES/Files_Summary.md",
+  "items": [],
+  "zones": [
+    {
+      "id": "back_to_computer",
+      "label": "Back",
+      "x": 10,
+      "y": 200,
+      "width": 80,
+      "height": 30,
+      "action": "navigate",
+      "target": "/LOCATIONS/AVERY_DESK/COMPUTER/Computer.json"
+    }
+  ]
+}

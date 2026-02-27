@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 """
-Convert all non-PNG images in ASSETS/IMAGES to PNG format.
-Supports common formats (JPEG, BMP, GIF, etc.) and RAW formats (ARW, CR2, NEF, etc.)
+Convert all non-PNG images under ASSETS/IMAGES/RAW/ to PNG format,
+mirroring the subdirectory structure into ASSETS/IMAGES/PNG/ORIGINAL_SIZE/.
+
+Example:
+  RAW/AVERY/DESK/BOOKS/file.arw -> PNG/ORIGINAL_SIZE/AVERY/DESK/BOOKS/file.png
 """
 
 import os
@@ -30,12 +33,10 @@ def convert_raw_to_png(input_path, output_path):
 
     try:
         with rawpy.imread(str(input_path)) as raw:
-            # Process RAW image to RGB
             rgb = raw.postprocess()
-            # Convert to PIL Image and save as PNG
             img = Image.fromarray(rgb)
             img.save(output_path, 'PNG')
-            print(f"Converted {input_path.name} -> {output_path.name}")
+            print(f"Converted {input_path.name} -> {output_path}")
             return True
     except Exception as e:
         print(f"Failed to convert {input_path.name}: {e}")
@@ -45,111 +46,79 @@ def convert_common_to_png(input_path, output_path):
     """Convert common image formats to PNG using PIL."""
     try:
         with Image.open(input_path) as img:
-            # Convert to RGB if necessary (handles RGBA, P, etc.)
             if img.mode in ('RGBA', 'LA'):
-                # Keep alpha channel
                 img.save(output_path, 'PNG')
             elif img.mode != 'RGB':
-                # Convert to RGB for other modes
                 img = img.convert('RGB')
                 img.save(output_path, 'PNG')
             else:
                 img.save(output_path, 'PNG')
-            print(f"Converted {input_path.name} -> {output_path.name}")
+            print(f"Converted {input_path.name} -> {output_path}")
             return True
     except Exception as e:
         print(f"Failed to convert {input_path.name}: {e}")
         return False
 
-def scan_and_convert(directory):
-    """Scan directory for non-PNG images and convert them to PNG."""
-    image_dir = Path(directory)
+def scan_and_convert(raw_root):
+    """
+    Recursively scan raw_root for non-PNG images and convert them to PNG,
+    mirroring the directory structure under PNG/ORIGINAL_SIZE/.
+    """
+    raw_root = Path(raw_root)
+    png_root = raw_root.parent / "PNG" / "ORIGINAL_SIZE"
 
-    if not image_dir.exists():
-        print(f"Error: Directory {directory} does not exist")
+    if not raw_root.exists():
+        print(f"Error: Directory {raw_root} does not exist")
         return
 
-    # Setup output directory (PNG/ORIGINAL_SIZE)
-    output_dir = image_dir.parent / "PNG" / "ORIGINAL_SIZE"
-    output_dir.mkdir(parents=True, exist_ok=True)
-    print(f"Output directory: {output_dir}\n")
+    print(f"Input root:  {raw_root}")
+    print(f"Output root: {png_root}\n")
 
-    # Find all image files
-    all_files = list(image_dir.iterdir())
-    image_files = [f for f in all_files if f.is_file()]
+    all_files = [f for f in raw_root.rglob('*') if f.is_file()]
+    converted = skipped = failed = 0
 
-    converted = 0
-    moved = 0
-    skipped = 0
-    failed = 0
+    print(f"Found {len(all_files)} files\n")
 
-    print(f"Scanning {image_dir}...")
-    print(f"Found {len(image_files)} files\n")
-
-    # First pass: move any existing PNGs to output directory
-    for file_path in image_files[:]:
-        if file_path.suffix.lower() == '.png':
-            dest_path = output_dir / file_path.name
-            if dest_path.exists():
-                print(f"Skipping move of {file_path.name} (already exists in output)")
-                skipped += 1
-            else:
-                try:
-                    shutil.move(str(file_path), str(dest_path))
-                    print(f"Moved existing PNG: {file_path.name} -> PNG/ORIGINAL_SIZE/")
-                    moved += 1
-                except Exception as e:
-                    print(f"Failed to move {file_path.name}: {e}")
-                    failed += 1
-            image_files.remove(file_path)
-
-    # Second pass: convert non-PNG images
-    for file_path in image_files:
+    for file_path in all_files:
         ext = file_path.suffix.lower()
+        rel = file_path.relative_to(raw_root)
 
-        # Create output filename in the output directory
-        output_path = output_dir / file_path.with_suffix('.png').name
+        output_path = png_root / rel.with_suffix('.png')
+        output_path.parent.mkdir(parents=True, exist_ok=True)
 
-        # Check if output already exists
         if output_path.exists():
-            print(f"Skipping {file_path.name} (PNG already exists in output)")
+            print(f"Skipping {rel} (PNG already exists)")
             skipped += 1
             continue
 
-        # Create temporary path for conversion (in same dir as source)
-        temp_output = file_path.with_suffix('.png')
-
-        # Convert based on format
-        success = False
-        if ext in RAW_FORMATS:
-            success = convert_raw_to_png(file_path, temp_output)
-        elif ext in COMMON_FORMATS:
-            success = convert_common_to_png(file_path, temp_output)
-        else:
-            print(f"Unknown format {file_path.name} - attempting conversion anyway...")
-            success = convert_common_to_png(file_path, temp_output)
-
-        if success:
-            # Move the converted PNG to output directory
+        if ext == '.png':
+            # Move existing PNGs into the mirrored structure
             try:
-                shutil.move(str(temp_output), str(output_path))
-                print(f"Moved to PNG/ORIGINAL_SIZE/{output_path.name}")
+                shutil.copy2(str(file_path), str(output_path))
+                print(f"Copied existing PNG: {rel}")
                 converted += 1
             except Exception as e:
-                print(f"Failed to move converted file: {e}")
+                print(f"Failed to copy {rel}: {e}")
                 failed += 1
+        elif ext in RAW_FORMATS:
+            success = convert_raw_to_png(file_path, output_path)
+            converted += success
+            failed += not success
+        elif ext in COMMON_FORMATS:
+            success = convert_common_to_png(file_path, output_path)
+            converted += success
+            failed += not success
         else:
-            failed += 1
+            print(f"Skipping unknown format: {rel}")
+            skipped += 1
 
     print(f"\n{'='*50}")
     print(f"Summary:")
-    print(f"  Converted: {converted}")
-    print(f"  Moved:     {moved}")
-    print(f"  Skipped:   {skipped}")
-    print(f"  Failed:    {failed}")
+    print(f"  Converted/copied: {converted}")
+    print(f"  Skipped:          {skipped}")
+    print(f"  Failed:           {failed}")
     print(f"{'='*50}\n")
 
 if __name__ == "__main__":
-    # Directory to scan
-    assets_dir = Path(__file__).parent.parent / "ASSETS" / "IMAGES" / "RAW"
-    scan_and_convert(assets_dir)
+    raw_root = Path(__file__).parent.parent / "ASSETS" / "IMAGES" / "RAW"
+    scan_and_convert(raw_root)

@@ -1,0 +1,9 @@
+{
+  "root_locations": [
+    "/LOCATIONS/AVERY_DESK/ROOT/Avery_Desk_Full.json",
+    "/LOCATIONS/LIBRARY/ROOT/Library.json"
+  ],
+  "root_notes": [
+    "/NOTES/AVERY_DESK/ROOT/Averys_Login_History.json"
+  ]
+}
