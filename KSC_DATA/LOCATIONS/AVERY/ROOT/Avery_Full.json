@@ -1,0 +1,25 @@
+{
+  "id": "AVERY_FULL",
+  "name": "Avery's Room",
+  "parent": "Root",
+  "isRoot": true,
+  "isDiscovered": true,
+  "primary_path": "/LOCATIONS/AVERY/ROOT/Avery_Full_320x240.png",
+  "secondary_path": "/LOCATIONS/AVERY/ROOT/Avery_Full_Summary.md",
+  "zones": [
+    {
+      "id": "desk",
+      "label": "Desk",
+      "x": 160, "y": 80, "width": 120, "height": 100,
+      "action": "navigate",
+      "target": "/LOCATIONS/AVERY/DESK/MAIN/Avery_Desk.json"
+    },
+    {
+      "id": "cable_cabinet",
+      "label": "Cable Cabinet",
+      "x": 20, "y": 80, "width": 100, "height": 140,
+      "action": "navigate",
+      "target": "/LOCATIONS/AVERY/CABLE_CABINET/MAIN/Avery_Cable_Cabinet.json"
+    }
+  ]
+}

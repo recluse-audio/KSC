@@ -1,0 +1,18 @@
+{
+  "id": "AVERY_CABLE_CABINET_DRAWER_2",
+  "name": "Drawer 2",
+  "parent": "AVERY_CABLE_CABINET",
+  "parent_path": "/LOCATIONS/AVERY/CABLE_CABINET/MAIN/Avery_Cable_Cabinet.json",
+  "isDiscovered": true,
+  "primary_path": "/LOCATIONS/AVERY/CABLE_CABINET/DRAWER/DRAWER_2/Avery_Cable_Cabinet_Drawer_2_320x240.png",
+  "secondary_path": "/LOCATIONS/AVERY/CABLE_CABINET/DRAWER/DRAWER_2/Avery_Cable_Cabinet_Drawer_2_Summary.md",
+  "zones": [
+    {
+      "id": "bluetooth_lavmic_clue",
+      "label": "Bluetooth Lavalier Mic",
+      "x": 60, "y": 60, "width": 200, "height": 120,
+      "action": "navigate",
+      "target": "/LOCATIONS/AVERY/CABLE_CABINET/DRAWER/DRAWER_2/BLUETOOTH_LAVMIC_CLUE/Avery_Cable_Cabinet_Drawer_2_Bluetooth_Clue.json"
+    }
+  ]
+}

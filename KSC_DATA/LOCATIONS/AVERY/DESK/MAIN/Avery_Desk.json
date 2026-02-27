@@ -1,0 +1,25 @@
+{
+  "id": "AVERY_DESK",
+  "name": "Desk",
+  "parent": "AVERY_FULL",
+  "parent_path": "/LOCATIONS/AVERY/ROOT/Avery_Full.json",
+  "isDiscovered": true,
+  "primary_path": "/LOCATIONS/AVERY/DESK/MAIN/Avery_Desk_320x240.png",
+  "secondary_path": "/LOCATIONS/AVERY/DESK/MAIN/Avery_Desk_Summary.md",
+  "zones": [
+    {
+      "id": "computer_section",
+      "label": "Computer",
+      "x": 20, "y": 60, "width": 110, "height": 120,
+      "action": "navigate",
+      "target": "/LOCATIONS/AVERY/DESK/COMPUTER/Avery_Desk_Computer.json"
+    },
+    {
+      "id": "books_section",
+      "label": "Books",
+      "x": 140, "y": 80, "width": 140, "height": 120,
+      "action": "navigate",
+      "target": "/LOCATIONS/AVERY/DESK/BOOKS/FULL/Avery_Desk_Books.json"
+    }
+  ]
+}

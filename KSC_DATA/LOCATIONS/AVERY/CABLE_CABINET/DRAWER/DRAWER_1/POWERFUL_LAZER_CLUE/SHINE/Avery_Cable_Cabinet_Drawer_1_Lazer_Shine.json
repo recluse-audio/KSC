@@ -1,0 +1,10 @@
+{
+  "id": "AVERY_CABLE_CABINET_DRAWER_1_LAZER_SHINE",
+  "name": "Powerful Lazer - Shine",
+  "parent": "AVERY_CABLE_CABINET_DRAWER_1_LAZER_ON_SHELF",
+  "parent_path": "/LOCATIONS/AVERY/CABLE_CABINET/DRAWER/DRAWER_1/POWERFUL_LAZER_CLUE/ON_SHELF/Avery_Cable_Cabinet_Drawer_1_Lazer_On_Shelf.json",
+  "isDiscovered": false,
+  "primary_path": "/LOCATIONS/AVERY/CABLE_CABINET/DRAWER/DRAWER_1/POWERFUL_LAZER_CLUE/SHINE/Avery_Cable_Cabinet_Drawer_1_Lazer_Shine_320x240.png",
+  "secondary_path": "/LOCATIONS/AVERY/CABLE_CABINET/DRAWER/DRAWER_1/POWERFUL_LAZER_CLUE/SHINE/Avery_Cable_Cabinet_Drawer_1_Lazer_Shine_Summary.md",
+  "zones": []
+}

@@ -1,0 +1,17 @@
+{
+  "id": "AVERY_DESK_BOOKS_INFINITE_JEST",
+  "name": "Infinite Jest",
+  "parent": "AVERY_DESK_BOOKS",
+  "parent_path": "/LOCATIONS/AVERY/DESK/BOOKS/FULL/Avery_Desk_Books.json",
+  "isDiscovered": true,
+  "primary_path": "/LOCATIONS/AVERY/DESK/BOOKS/INFINITE_JEST/Avery_Desk_Books_Infinite_Jest_320x240.png",
+  "secondary_path": "/LOCATIONS/AVERY/DESK/BOOKS/INFINITE_JEST/Avery_Desk_Books_Infinite_Jest_Summary.md",
+  "zones": [
+    {
+      "id": "infinite_jest_clue",
+      "x": 100, "y": 20, "width": 120, "height": 80,
+      "action": "navigate",
+      "target": "/LOCATIONS/AVERY/DESK/BOOKS/INFINITE_JEST/PASSWORD/Avery_Desk_Books_Infinite_Jest_Password.json"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "id": "AVERY_DESK_COMPUTER_PROGRAMS",
+  "name": "Programs",
+  "parent": "AVERY_DESK_COMPUTER",
+  "parent_path": "/LOCATIONS/AVERY/DESK/COMPUTER/Avery_Desk_Computer.json",
+  "isDiscovered": true,
+  "primary_path": "",
+  "secondary_path": "/LOCATIONS/AVERY/DESK/COMPUTER/PROGRAMS/Avery_Desk_Computer_Programs_Summary.md",
+  "zones": []
+}

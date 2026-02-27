@@ -1,0 +1,53 @@
+{
+  "id": "AVERY_CABLE_CABINET",
+  "name": "Cable Cabinet",
+  "parent": "AVERY_FULL",
+  "parent_path": "/LOCATIONS/AVERY/ROOT/Avery_Full.json",
+  "isDiscovered": true,
+  "primary_path": "/LOCATIONS/AVERY/CABLE_CABINET/MAIN/Avery_Cable_Cabinet_320x240.png",
+  "secondary_path": "/LOCATIONS/AVERY/CABLE_CABINET/MAIN/Avery_Cable_Cabinet_Summary.md",
+  "zones": [
+    {
+      "id": "top_shelf",
+      "label": "Top Shelf",
+      "x": 60, "y": 0, "width": 200, "height": 50,
+      "action": "navigate",
+      "target": "/LOCATIONS/AVERY/CABLE_CABINET/DRAWER/TOP_SHELF/Avery_Cable_Cabinet_Top_Shelf.json"
+    },
+    {
+      "id": "drawer_1",
+      "label": "Drawer 1",
+      "x": 60, "y": 55, "width": 200, "height": 25,
+      "action": "navigate",
+      "target": "/LOCATIONS/AVERY/CABLE_CABINET/DRAWER/DRAWER_1/Avery_Cable_Cabinet_Drawer_1.json"
+    },
+    {
+      "id": "drawer_2",
+      "label": "Drawer 2",
+      "x": 60, "y": 80, "width": 200, "height": 25,
+      "action": "navigate",
+      "target": "/LOCATIONS/AVERY/CABLE_CABINET/DRAWER/DRAWER_2/Avery_Cable_Cabinet_Drawer_2.json"
+    },
+    {
+      "id": "drawer_8",
+      "label": "Drawer 8",
+      "x": 60, "y": 165, "width": 200, "height": 25,
+      "action": "navigate",
+      "target": "/LOCATIONS/AVERY/CABLE_CABINET/DRAWER/DRAWER_8/Avery_Cable_Cabinet_Drawer_8.json"
+    },
+    {
+      "id": "drawer_9",
+      "label": "Drawer 9",
+      "x": 60, "y": 190, "width": 200, "height": 25,
+      "action": "navigate",
+      "target": "/LOCATIONS/AVERY/CABLE_CABINET/DRAWER/DRAWER_9/Avery_Cable_Cabinet_Drawer_9.json"
+    },
+    {
+      "id": "drawer_10",
+      "label": "Drawer 10",
+      "x": 60, "y": 215, "width": 200, "height": 25,
+      "action": "navigate",
+      "target": "/LOCATIONS/AVERY/CABLE_CABINET/DRAWER/DRAWER_10/Avery_Cable_Cabinet_Drawer_10.json"
+    }
+  ]
+}

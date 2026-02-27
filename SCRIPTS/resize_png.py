@@ -130,10 +130,10 @@ Examples:
         """
     )
 
-    parser.add_argument('-w', '--width', type=int, default=320,
-        help='Target width in pixels (default: 320)')
-    parser.add_argument('-H', '--height', type=int, default=240,
-        help='Target height in pixels (default: 240)')
+    parser.add_argument('-w', '--width', type=int, default=None,
+        help='Target width in pixels (default: runs both 320x240 and 640x480)')
+    parser.add_argument('-H', '--height', type=int, default=None,
+        help='Target height in pixels (default: runs both 320x240 and 640x480)')
     parser.add_argument('-s', '--source', type=str, default=str(default_source),
         help=f'Source root directory (default: {default_source})')
     parser.add_argument('-t', '--target', type=str, default=None,
@@ -143,13 +143,24 @@ Examples:
 
     args = parser.parse_args()
 
-    if not (1 <= args.width <= 10000):
-        parser.error(f"Width must be between 1 and 10000 (got {args.width})")
-    if not (1 <= args.height <= 10000):
-        parser.error(f"Height must be between 1 and 10000 (got {args.height})")
-
     source_dir = Path(args.source)
-    target_dir = Path(args.target) if args.target else \
-        project_root / "ASSETS" / "IMAGES" / "PNG" / f"{args.width}x{args.height}"
 
-    resize_images(source_dir, target_dir, target_size=(args.width, args.height), stretch=args.stretch)
+    # If a custom size is given, run only that size; otherwise run both defaults
+    if args.width is not None or args.height is not None:
+        w = args.width or 320
+        h = args.height or 240
+        if not (1 <= w <= 10000):
+            parser.error(f"Width must be between 1 and 10000 (got {w})")
+        if not (1 <= h <= 10000):
+            parser.error(f"Height must be between 1 and 10000 (got {h})")
+        target_dir = Path(args.target) if args.target else \
+            project_root / "ASSETS" / "IMAGES" / "PNG" / f"{w}x{h}"
+        resize_images(source_dir, target_dir, target_size=(w, h), stretch=args.stretch)
+    else:
+        for (w, h) in [(320, 240), (640, 480)]:
+            target_dir = Path(args.target) if args.target else \
+                project_root / "ASSETS" / "IMAGES" / "PNG" / f"{w}x{h}"
+            print(f"\n{'='*50}")
+            print(f"Resizing to {w}x{h}")
+            print(f"{'='*50}")
+            resize_images(source_dir, target_dir, target_size=(w, h), stretch=args.stretch)

@@ -1,0 +1,18 @@
+{
+  "id": "AVERY_CABLE_CABINET_DRAWER_1",
+  "name": "Drawer 1",
+  "parent": "AVERY_CABLE_CABINET",
+  "parent_path": "/LOCATIONS/AVERY/CABLE_CABINET/MAIN/Avery_Cable_Cabinet.json",
+  "isDiscovered": true,
+  "primary_path": "/LOCATIONS/AVERY/CABLE_CABINET/DRAWER/DRAWER_1/Avery_Cable_Cabinet_Drawer_1_320x240.png",
+  "secondary_path": "/LOCATIONS/AVERY/CABLE_CABINET/DRAWER/DRAWER_1/Avery_Cable_Cabinet_Drawer_1_Summary.md",
+  "zones": [
+    {
+      "id": "powerful_lazer_clue",
+      "label": "Powerful Lazer",
+      "x": 60, "y": 60, "width": 200, "height": 120,
+      "action": "navigate",
+      "target": "/LOCATIONS/AVERY/CABLE_CABINET/DRAWER/DRAWER_1/POWERFUL_LAZER_CLUE/ON_SHELF/Avery_Cable_Cabinet_Drawer_1_Lazer_On_Shelf.json"
+    }
+  ]
+}

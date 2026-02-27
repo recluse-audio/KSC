@@ -1,0 +1,10 @@
+{
+  "id": "AVERY_CABLE_CABINET_DRAWER_8",
+  "name": "Drawer 8",
+  "parent": "AVERY_CABLE_CABINET",
+  "parent_path": "/LOCATIONS/AVERY/CABLE_CABINET/MAIN/Avery_Cable_Cabinet.json",
+  "isDiscovered": true,
+  "primary_path": "/LOCATIONS/AVERY/CABLE_CABINET/DRAWER/DRAWER_8/Avery_Cable_Cabinet_Drawer_8_320x240.png",
+  "secondary_path": "/LOCATIONS/AVERY/CABLE_CABINET/DRAWER/DRAWER_8/Avery_Cable_Cabinet_Drawer_8_Summary.md",
+  "zones": []
+}

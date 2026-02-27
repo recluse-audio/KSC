@@ -1,0 +1,10 @@
+{
+  "id": "AVERY_CABLE_CABINET_TOP_SHELF",
+  "name": "Top Shelf",
+  "parent": "AVERY_CABLE_CABINET",
+  "parent_path": "/LOCATIONS/AVERY/CABLE_CABINET/MAIN/Avery_Cable_Cabinet.json",
+  "isDiscovered": true,
+  "primary_path": "/LOCATIONS/AVERY/CABLE_CABINET/DRAWER/TOP_SHELF/Avery_Cable_Cabinet_Top_Shelf_320x240.png",
+  "secondary_path": "/LOCATIONS/AVERY/CABLE_CABINET/DRAWER/TOP_SHELF/Avery_Cable_Cabinet_Top_Shelf_Summary.md",
+  "zones": []
+}
