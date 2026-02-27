@@ -1,8 +1,0 @@
-{
-  "id": "NOTE_AVERY_FULL",
-  "name": "Note: Avery's Room",
-  "location_path": "/LOCATIONS/AVERY/ROOT/Avery_Full.json",
-  "primary_path": "/NOTES/AVERY/ROOT/Avery_Full_Note.md",
-  "secondary_path": "",
-  "isDiscovered": false
-}

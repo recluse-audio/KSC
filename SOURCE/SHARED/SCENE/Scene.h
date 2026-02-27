@@ -39,6 +39,8 @@ public:
     std::string getParentPath()                         const;
     void        setParentPath(std::string path);
     std::string getInterceptingZoneNoteTarget(int x, int y) const;
+    std::string getNoteTarget() const;
+    void        setNoteTarget(std::string path);
 
     void addChildScene(std::string childScene);
     void addZone(Zone zone);
@@ -50,6 +52,7 @@ private:
     std::string mName           = "";
     std::string mPrimaryPath    = ""; // PNG for locations, markdown for notes
     std::string mSecondaryPath  = ""; // markdown for locations, PNG for notes (optional)
+    std::string mNoteTarget     = ""; // data-root-relative path of the note .md to append to on discovery
     bool        mIsRoot         = false;
     bool        mIsDiscovered   = false;
     std::string mParentPath     = "";

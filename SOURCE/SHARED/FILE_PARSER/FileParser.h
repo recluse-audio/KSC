@@ -25,4 +25,9 @@ public:
      * Write content to the file at the given path, overwriting any existing data.
      */
     virtual void writeToFile(const std::string& path, const std::string& content) = 0;
+
+    /**
+     * Append content to the file at the given path without overwriting existing data.
+     */
+    virtual void appendToFile(const std::string& path, const std::string& content) = 0;
 };

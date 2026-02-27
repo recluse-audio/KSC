@@ -37,4 +37,14 @@ public:
             file.close();
         }
     }
+
+    void appendToFile(const std::string& path, const std::string& content) override
+    {
+        File file = SD.open(path.c_str(), FILE_APPEND);
+        if (file)
+        {
+            file.print(content.c_str());
+            file.close();
+        }
+    }
 };

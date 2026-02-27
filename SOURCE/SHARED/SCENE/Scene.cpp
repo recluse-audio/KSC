@@ -47,6 +47,8 @@ bool Scene::isDiscovered()              const { return mIsDiscovered; }
 void Scene::setIsDiscovered(bool d)           { mIsDiscovered = d; }
 std::string Scene::getParentPath()      const { return mParentPath; }
 void Scene::setParentPath(std::string path)   { mParentPath = path; }
+std::string Scene::getNoteTarget()      const { return mNoteTarget; }
+void Scene::setNoteTarget(std::string path)   { mNoteTarget = path; }
 
 std::string Scene::getInterceptingZoneNoteTarget(int x, int y) const
 {

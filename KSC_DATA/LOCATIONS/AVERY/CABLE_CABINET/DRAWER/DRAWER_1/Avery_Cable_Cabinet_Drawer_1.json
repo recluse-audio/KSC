@@ -12,7 +12,7 @@
       "label": "Powerful Lazer",
       "x": 60, "y": 60, "width": 200, "height": 120,
       "action": "navigate",
-      "target": "/LOCATIONS/AVERY/CABLE_CABINET/DRAWER/DRAWER_1/POWERFUL_LAZER_CLUE/ON_SHELF/Avery_Cable_Cabinet_Drawer_1_Lazer_On_Shelf.json"
+      "target": "/LOCATIONS/AVERY/CABLE_CABINET/DRAWER/DRAWER_1/POWERFUL_LAZER_CLUE/Powerful_Lazer_Clue.json"
     }
   ]
 }

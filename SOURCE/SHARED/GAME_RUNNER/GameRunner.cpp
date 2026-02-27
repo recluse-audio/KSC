@@ -90,11 +90,30 @@ void GameRunner::syncControlsState()
     mControlsView.setState(state);
 }
 
+void GameRunner::discoverSceneNote(const std::string& scenePath, const std::string& sceneJson)
+{
+    std::string clueText = mFileParser.load(mActiveScene->getSecondaryPath());
+    if (!clueText.empty())
+        mFileParser.appendToFile(mActiveScene->getNoteTarget(), clueText);
+
+    nlohmann::json j = nlohmann::json::parse(sceneJson, nullptr, false);
+    if (!j.is_discarded())
+    {
+        j["isDiscovered"] = true;
+        mFileParser.writeToFile(scenePath, j.dump(2));
+    }
+    mActiveScene->setIsDiscovered(true);
+}
+
 void GameRunner::loadScene(const std::string& path)
 {
     mOverlayVisible = false;
     std::string json = mFileParser.load(path);
     mActiveScene = mSceneFactory.build(json);
+
+    if (!mActiveScene->isDiscovered() && !mActiveScene->getNoteTarget().empty())
+        discoverSceneNote(path, json);
+
     syncControlsState();
 }
 

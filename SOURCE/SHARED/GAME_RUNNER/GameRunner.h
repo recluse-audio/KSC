@@ -63,6 +63,7 @@ private:
     std::string mCurrentNoteID;
 
     void discoverNote(const std::string& notePath);
+    void discoverSceneNote(const std::string& scenePath, const std::string& sceneJson);
     void dispatchCallback(const std::string& callbackId);
     void syncControlsState();
 };

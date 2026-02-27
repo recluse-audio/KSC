@@ -12,14 +12,14 @@
       "label": "DSP Book",
       "x": 0, "y": 30, "width": 107, "height": 210,
       "action": "navigate",
-      "target": "/LOCATIONS/AVERY/DESK/BOOKS/DSP/Avery_Desk_Books_Dsp.json"
+      "target": "/LOCATIONS/AVERY/DESK/BOOKS/DSP_CLUE/DSP_Clue.json"
     },
     {
       "id": "book_sql",
       "label": "SQL Book",
       "x": 107, "y": 30, "width": 106, "height": 210,
       "action": "navigate",
-      "target": "/LOCATIONS/AVERY/DESK/BOOKS/SQL/Avery_Desk_Books_Sql.json"
+      "target": "/LOCATIONS/AVERY/DESK/BOOKS/SQL_CLUE/SQL_CLUE.json"
     },
     {
       "id": "book_infinitejest",

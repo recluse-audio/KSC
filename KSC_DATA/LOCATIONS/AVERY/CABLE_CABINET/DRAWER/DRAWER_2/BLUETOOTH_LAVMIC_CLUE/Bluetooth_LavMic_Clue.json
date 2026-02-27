@@ -4,6 +4,7 @@
   "parent": "AVERY_CABLE_CABINET_DRAWER_2",
   "parent_path": "/LOCATIONS/AVERY/CABLE_CABINET/DRAWER/DRAWER_2/Avery_Cable_Cabinet_Drawer_2.json",
   "isDiscovered": false,
+  "notePath": "/NOTES/AVERY/Avery_Note.md",
   "primary_path": "/LOCATIONS/AVERY/CABLE_CABINET/DRAWER/DRAWER_2/BLUETOOTH_LAVMIC_CLUE/Avery_Cable_Cabinet_Drawer_2_Bluetooth_Clue_320x240.png",
   "secondary_path": "/LOCATIONS/AVERY/CABLE_CABINET/DRAWER/DRAWER_2/BLUETOOTH_LAVMIC_CLUE/Avery_Cable_Cabinet_Drawer_2_Bluetooth_Clue_Summary.md",
   "zones": []

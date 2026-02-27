@@ -6,7 +6,6 @@
   "isDiscovered": true,
   "primary_path": "/LOCATIONS/AVERY/DESK/COMPUTER/Avery_Desk_Computer_320x240.png",
   "secondary_path": "/LOCATIONS/AVERY/DESK/COMPUTER/Avery_Desk_Computer_Summary.md",
-  "password": "kittens123",
   "zones": [
     {
       "id": "files_dir",

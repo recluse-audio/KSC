@@ -37,6 +37,13 @@ public:
             file << content;
     }
 
+    void appendToFile(const std::string& path, const std::string& content) override
+    {
+        std::ofstream file(sdPath(path), std::ios::app);
+        if (file.is_open())
+            file << content;
+    }
+
 private:
     static std::string sdPath(const std::string& path)
     {

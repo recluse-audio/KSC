@@ -20,6 +20,7 @@ std::unique_ptr<Scene> SceneFactory::build(const std::string& jsonString)
     scene->setIsRoot(j.value("isRoot", false));
     scene->setIsDiscovered(j.value("isDiscovered", false));
     scene->setParentPath(j.value("parent_path", ""));
+    scene->setNoteTarget(j.value("notePath", ""));
 
     if (j.contains("zones") && j["zones"].is_array())
     {
