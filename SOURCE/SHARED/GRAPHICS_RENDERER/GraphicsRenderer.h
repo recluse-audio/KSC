@@ -30,5 +30,5 @@ public:
      * Load and render an SVG asset from the given path at the given
      * screen coordinates.
      */
-    virtual void drawSVG(const std::string& path, int x, int y) = 0;
+    virtual void drawSVG(const std::string& path, int x, int y, int w = 0, int h = 0) = 0;
 };

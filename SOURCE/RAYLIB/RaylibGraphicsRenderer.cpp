@@ -44,9 +44,9 @@ void RaylibGraphicsRenderer::drawText(const std::string& path, int /*x*/, int y)
     }
 }
 
-void RaylibGraphicsRenderer::drawSVG(const std::string& path, int x, int y)
+void RaylibGraphicsRenderer::drawSVG(const std::string& path, int x, int y, int w, int h)
 {
-    drawSvgAt(sdPath(path), x, y);
+    drawSvgAt(sdPath(path), x, y, w, h);
 }
 
 // -----------------------------------------------------------------
@@ -63,9 +63,11 @@ void RaylibGraphicsRenderer::drawPng(const std::string& fullPath)
         DrawTextureEx(mCachedTexture, {0, 0}, 0.0f, (float)SCALE, WHITE);
 }
 
-void RaylibGraphicsRenderer::drawSvgAt(const std::string& fullPath, int x, int y, Color tint)
+void RaylibGraphicsRenderer::drawSvgAt(const std::string& fullPath, int x, int y, int targetW, int targetH)
 {
-    if (mSvgCache.find(fullPath) == mSvgCache.end())
+    std::string cacheKey = fullPath + "@" + std::to_string(targetW) + "x" + std::to_string(targetH);
+
+    if (mSvgCache.find(cacheKey) == mSvgCache.end())
     {
         std::ifstream file(fullPath);
         if (!file.is_open()) return;
@@ -77,23 +79,35 @@ void RaylibGraphicsRenderer::drawSvgAt(const std::string& fullPath, int x, int y
         NSVGimage* image = nsvgParse(buf.data(), "px", 96.0f);
         if (!image) return;
 
-        int w = (int)image->width;
-        int h = (int)image->height;
-        if (w <= 0 || h <= 0) { nsvgDelete(image); return; }
+        float svgW = image->width;
+        float svgH = image->height;
+        if (svgW <= 0 || svgH <= 0) { nsvgDelete(image); return; }
+
+        int rasterW = (targetW > 0) ? targetW * SCALE : (int)svgW;
+        int rasterH = (targetH > 0) ? targetH * SCALE : (int)svgH;
+        float scale = (targetW > 0) ? (float)rasterW / svgW : 1.0f;
 
         NSVGrasterizer* rast = nsvgCreateRasterizer();
-        std::vector<uint8_t> pixels(w * h * 4);
-        nsvgRasterize(rast, image, 0.0f, 0.0f, 1.0f, pixels.data(), w, h, w * 4);
+        std::vector<uint8_t> pixels(rasterW * rasterH * 4);
+        nsvgRasterize(rast, image, 0.0f, 0.0f, scale, pixels.data(), rasterW, rasterH, rasterW * 4);
         nsvgDeleteRasterizer(rast);
         nsvgDelete(image);
 
-        Image img = { (void*)pixels.data(), w, h, 1, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8 };
-        mSvgCache[fullPath] = LoadTextureFromImage(img);
+        // Force all pixels to white, preserving alpha
+        for (size_t i = 0; i < pixels.size(); i += 4)
+        {
+            pixels[i]     = 255;
+            pixels[i + 1] = 255;
+            pixels[i + 2] = 255;
+        }
+
+        Image img = { (void*)pixels.data(), rasterW, rasterH, 1, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8 };
+        mSvgCache[cacheKey] = LoadTextureFromImage(img);
     }
 
-    const Texture2D& tex = mSvgCache.at(fullPath);
+    const Texture2D& tex = mSvgCache.at(cacheKey);
     if (tex.id > 0)
-        DrawTextureEx(tex, {(float)(x * SCALE), (float)(y * SCALE)}, 0.0f, (float)SCALE, tint);
+        DrawTextureEx(tex, {(float)(x * SCALE), (float)(y * SCALE)}, 0.0f, 1.0f, WHITE);
 }
 
 void RaylibGraphicsRenderer::drawMarkdown(const std::string& fullPath, int startY, float textScale)

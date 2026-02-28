@@ -6,13 +6,13 @@
   "secondary_path": "/BANNERS/START_SCREEN/Start_Screen_Summary.md",
   "zones": [
     {
-      "id": "save_button",
-      "label": "Save",
+      "id": "start_button",
+      "label": "Start",
       "x": 110,
       "y": 120,
       "width": 100,
       "height": 20,
-      "target": ""
+      "target": "/LOCATIONS/AVERY/ROOT/Avery_Full.json"
     },
     {
       "id": "load_button",
@@ -30,7 +30,7 @@
       "y": 180,
       "width": 100,
       "height": 20,
-      "target": "/LOCATIONS/AVERY/ROOT/Avery_Full.json"
+      "target": ""
     }
   ]
 }

@@ -87,7 +87,7 @@ void GameRunner::dispatchCallback(const std::string& callbackId)
         mCurrentMode = "notes";
         syncControlsState();
     }
-    else if (callbackId == "save_button")
+    else if (callbackId == "start_button")
     {
         mGameStartManager.save();
         loadScene("/LOCATIONS/AVERY/ROOT/Avery_Full.json");

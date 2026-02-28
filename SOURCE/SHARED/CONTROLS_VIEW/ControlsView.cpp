@@ -46,7 +46,7 @@ void ControlsView::draw()
     for (const auto& btn : mButtons)
     {
         if (isButtonVisible(btn) && !btn.icon.empty())
-            mRenderer.drawSVG(btn.icon, btn.x, btn.y);
+            mRenderer.drawSVG(btn.icon, btn.x, btn.y, btn.w, btn.h);
     }
 }
 

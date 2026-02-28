@@ -15,5 +15,5 @@ class ESP32GraphicsRenderer : public GraphicsRenderer
 public:
     void drawImage(const std::string& path) override;
     void drawText(const std::string& path, int x, int y) override;
-    void drawSVG(const std::string& path, int x, int y) override;
+    void drawSVG(const std::string& path, int x, int y, int w = 0, int h = 0) override;
 };

@@ -26,7 +26,7 @@ public:
 
     void drawImage(const std::string& path) override;
     void drawText(const std::string& path, int x, int y) override;
-    void drawSVG(const std::string& path, int x, int y) override;
+    void drawSVG(const std::string& path, int x, int y, int w = 0, int h = 0) override;
 
 private:
     std::string mCachedPath;
@@ -36,5 +36,5 @@ private:
     static std::string sdPath(const std::string& path);
     void drawPng(const std::string& fullPath);
     void drawMarkdown(const std::string& fullPath, int startY = 10, float textScale = 1.0f);
-    void drawSvgAt(const std::string& fullPath, int x, int y, Color tint = WHITE);
+    void drawSvgAt(const std::string& fullPath, int x, int y, int targetW = 0, int targetH = 0);
 };
