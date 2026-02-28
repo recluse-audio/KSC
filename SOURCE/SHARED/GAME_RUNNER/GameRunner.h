@@ -52,7 +52,7 @@ public:
     std::string getCurrentNoteID()     const;
 
 private:
-    FileOperator&            mFileOperator;
+    FileOperator&          mFileOperator;
     GraphicsRenderer&      mRenderer;
     SceneView              mSceneView;
     ControlsView           mControlsView;

@@ -5,6 +5,12 @@
 #include <algorithm>
 #include <filesystem>
 
+/**
+ * These tests are intended to cover the creation of a new save slot 
+ * (aka new game state folder is made in the KSC_DATA)
+ * 
+ * For tests of switching to the correct start location use test_GameRunner.cpp
+ */
 namespace fs = std::filesystem;
 
 // Golden Game_State.json — the default file installed with the game.
