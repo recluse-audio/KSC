@@ -4,7 +4,7 @@
  */
 
 #include "raylib.h"
-#include "RaylibFileParser.h"
+#include "RaylibFileOperator.h"
 #include "RaylibGraphicsRenderer.h"
 #include "../SHARED/GAME_RUNNER/GameRunner.h"
 #include <filesystem>
@@ -31,9 +31,9 @@ int main()
     InitWindow(SCREEN_W, SCREEN_H, "KSC");
     SetTargetFPS(60);
 
-    RaylibFileParser       fileParser;
+    RaylibFileOperator       fileParser;
     RaylibGraphicsRenderer renderer;
-    GameRunner             game(fileParser, renderer);
+    GameRunner             game(fileParser, renderer, "locations", "", "", "C:/KSC_GAME/SAVED_GAMES");
 
     game.loadScene("/BANNERS/START_SCREEN/Start_Screen.json");
 

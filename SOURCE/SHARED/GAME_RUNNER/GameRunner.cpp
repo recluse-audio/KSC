@@ -1,20 +1,22 @@
 #include "GameRunner.h"
-#include "../FILE_PARSER/FileParser.h"
+#include "../FILE_OPERATOR/FileOperator.h"
 #include "../GRAPHICS_RENDERER/GraphicsRenderer.h"
 #include "../SCENE/Scene.h"
 #include <nlohmann/json.hpp>
 
-GameRunner::GameRunner(FileParser& fileParser, GraphicsRenderer& renderer,
-                       std::string mode, std::string locationID, std::string noteID)
-: mFileParser(fileParser)
+GameRunner::GameRunner(FileOperator& fileParser, GraphicsRenderer& renderer,
+                       std::string mode, std::string locationID, std::string noteID,
+                       std::string saveDir)
+: mFileOperator(fileParser)
 , mRenderer(renderer)
 , mSceneView(renderer)
 , mControlsView(renderer)
+, mGameStartManager(fileParser, std::move(saveDir))
 , mCurrentMode(mode)
 , mCurrentLocationID(locationID)
 , mCurrentNoteID(noteID)
 {
-    std::string controlsJson = mFileParser.load("/GUI/Controls_View.json");
+    std::string controlsJson = mFileOperator.load("/GUI/Controls_View.json");
     mControlsView.load(controlsJson);
 }
 
@@ -45,7 +47,14 @@ void GameRunner::registerHit(int x, int y)
 
     std::string target = mActiveScene->getInterceptingZoneTarget(x, y);
     if (!target.empty())
+    {
         loadScene(target);
+        return;
+    }
+
+    std::string zoneId = mActiveScene->getInterceptingZoneID(x, y);
+    if (!zoneId.empty())
+        dispatchCallback(zoneId);
 }
 
 void GameRunner::dispatchCallback(const std::string& callbackId)
@@ -78,6 +87,11 @@ void GameRunner::dispatchCallback(const std::string& callbackId)
         mCurrentMode = "notes";
         syncControlsState();
     }
+    else if (callbackId == "save_button")
+    {
+        mGameStartManager.save();
+        loadScene("/LOCATIONS/AVERY/ROOT/Avery_Full.json");
+    }
 }
 
 void GameRunner::syncControlsState()
@@ -92,15 +106,15 @@ void GameRunner::syncControlsState()
 
 void GameRunner::discoverSceneNote(const std::string& scenePath, const std::string& sceneJson)
 {
-    std::string clueText = mFileParser.load(mActiveScene->getSecondaryPath());
+    std::string clueText = mFileOperator.load(mActiveScene->getSecondaryPath());
     if (!clueText.empty())
-        mFileParser.appendToFile(mActiveScene->getNoteTarget(), clueText);
+        mFileOperator.appendToFile(mActiveScene->getNoteTarget(), clueText);
 
     nlohmann::json j = nlohmann::json::parse(sceneJson, nullptr, false);
     if (!j.is_discarded())
     {
         j["isDiscovered"] = true;
-        mFileParser.writeToFile(scenePath, j.dump(2));
+        mFileOperator.writeToFile(scenePath, j.dump(2));
     }
     mActiveScene->setIsDiscovered(true);
 }
@@ -108,7 +122,7 @@ void GameRunner::discoverSceneNote(const std::string& scenePath, const std::stri
 void GameRunner::loadScene(const std::string& path)
 {
     mOverlayVisible = false;
-    std::string json = mFileParser.load(path);
+    std::string json = mFileOperator.load(path);
     mActiveScene = mSceneFactory.build(json);
 
     if (!mActiveScene->isDiscovered() && !mActiveScene->getNoteTarget().empty())
@@ -119,11 +133,41 @@ void GameRunner::loadScene(const std::string& path)
 
 void GameRunner::discoverNote(const std::string& notePath)
 {
-    std::string json = mFileParser.load(notePath);
+    std::string json = mFileOperator.load(notePath);
     nlohmann::json j = nlohmann::json::parse(json, nullptr, false);
     if (j.is_discarded()) return;
     j["isDiscovered"] = true;
-    mFileParser.writeToFile(notePath, j.dump(2));
+    mFileOperator.writeToFile(notePath, j.dump(2));
+}
+
+void GameRunner::refreshNote(const std::string& clueArrayKey)
+{
+    std::string stateJson = mFileOperator.load("/GAME_STATE/Game_State.json");
+    nlohmann::json state = nlohmann::json::parse(stateJson, nullptr, false);
+    if (state.is_discarded()) return;
+
+    auto& configs = state["note_configs"];
+    if (!configs.contains(clueArrayKey)) return;
+
+    std::string notePath = configs[clueArrayKey].value("note_path", "");
+    std::string basePath = configs[clueArrayKey].value("base_path", "");
+    if (notePath.empty()) return;
+
+    mFileOperator.writeToFile(notePath, mFileOperator.load(basePath));
+
+    auto& clues = state[clueArrayKey];
+    for (auto it = clues.begin(); it != clues.end(); ++it)
+    {
+        if (!it.value().get<bool>()) continue;
+
+        std::string clueJson = mFileOperator.load(it.key());
+        nlohmann::json clue = nlohmann::json::parse(clueJson, nullptr, false);
+        if (clue.is_discarded()) continue;
+
+        std::string secondaryPath = clue.value("secondary_path", "");
+        if (!secondaryPath.empty())
+            mFileOperator.appendToFile(notePath, mFileOperator.load(secondaryPath));
+    }
 }
 
 std::string GameRunner::getCurrentMode() const

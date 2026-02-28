@@ -3,19 +3,21 @@
  */
 
 #pragma once
-#include "../SHARED/FILE_PARSER/FileParser.h"
+#include "../SHARED/FILE_OPERATOR/FileOperator.h"
+#include <filesystem>
 #include <fstream>
 #include <sstream>
+#include <vector>
 
 /**
- * Desktop (Raylib) implementation of FileParser.
+ * Desktop (Raylib) implementation of FileOperator.
  * Reads files from the local filesystem using std::ifstream.
  *
  * Paths are data-root-relative (e.g. "/LOCATIONS/DESK/MAIN/Desk_Full.json").
  * The "KSC_DATA" directory in the working directory is treated as the data root,
  * so a leading '/' is replaced with "KSC_DATA/".
  */
-class RaylibFileParser : public FileParser
+class RaylibFileOperator : public FileOperator
 {
 public:
     std::string load(const std::string& path) override
@@ -32,7 +34,10 @@ public:
 
     void writeToFile(const std::string& path, const std::string& content) override
     {
-        std::ofstream file(sdPath(path));
+        namespace fs = std::filesystem;
+        fs::path full = sdPath(path);
+        fs::create_directories(full.parent_path());
+        std::ofstream file(full);
         if (file.is_open())
             file << content;
     }
@@ -42,6 +47,17 @@ public:
         std::ofstream file(sdPath(path), std::ios::app);
         if (file.is_open())
             file << content;
+    }
+
+    std::vector<std::string> listDirectory(const std::string& path) override
+    {
+        namespace fs = std::filesystem;
+        std::vector<std::string> entries;
+        fs::path dir = sdPath(path);
+        if (!fs::exists(dir)) return entries;
+        for (auto& entry : fs::directory_iterator(dir))
+            entries.push_back(entry.path().filename().string());
+        return entries;
     }
 
 private:

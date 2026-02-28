@@ -6,13 +6,31 @@
   "secondary_path": "/BANNERS/START_SCREEN/Start_Screen_Summary.md",
   "zones": [
     {
-      "id": "start_button",
-      "label": "Start",
-      "x": 100,
-      "y": 140,
+      "id": "save_button",
+      "label": "Save",
+      "x": 110,
+      "y": 120,
       "width": 100,
-      "height": 35,
-      "target": "/LOCATIONS/AVERY_DESK/ROOT/Avery_Desk_Full.json"
+      "height": 20,
+      "target": ""
+    },
+    {
+      "id": "load_button",
+      "label": "Load",
+      "x": 110,
+      "y": 150,
+      "width": 100,
+      "height": 20,
+      "target": ""
+    },
+    {
+      "id": "continue_button",
+      "label": "Continue",
+      "x": 110,
+      "y": 180,
+      "width": 100,
+      "height": 20,
+      "target": "/LOCATIONS/AVERY/ROOT/Avery_Full.json"
     }
   ]
 }

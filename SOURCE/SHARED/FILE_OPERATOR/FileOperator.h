@@ -4,16 +4,16 @@
 
 #pragma once
 #include <string>
+#include <vector>
 
 /**
- * Abstract base class for reading a file from storage and returning its
- * contents as a string. Subclass per platform (ESP32, Raylib desktop, etc.)
- * to provide the appropriate file I/O implementation.
+ * Abstract base class for file I/O operations on storage. Subclass per platform
+ * (ESP32, Raylib desktop, etc.) to provide the appropriate implementation.
  */
-class FileParser
+class FileOperator
 {
 public:
-    virtual ~FileParser() = default;
+    virtual ~FileOperator() = default;
 
     /**
      * Read the file at the given path and return its full contents as a string.
@@ -30,4 +30,10 @@ public:
      * Append content to the file at the given path without overwriting existing data.
      */
     virtual void appendToFile(const std::string& path, const std::string& content) = 0;
+
+    /**
+     * Return the names of all entries (files and subdirectories) inside dirPath.
+     * Returns an empty vector if the directory does not exist or cannot be opened.
+     */
+    virtual std::vector<std::string> listDirectory(const std::string& dirPath) = 0;
 };

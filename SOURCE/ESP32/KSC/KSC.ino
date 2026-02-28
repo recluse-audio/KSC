@@ -13,7 +13,7 @@
 #include <SD.h>
 #include <TFT_eSPI.h>
 
-#include "../ESP32FileParser.h"
+#include "../ESP32FileOperator.h"
 #include "../ESP32SceneRunner.h"
 #include "../../SHARED/GAME_RUNNER/GameRunner.h"
 
@@ -23,8 +23,8 @@ static const int SD_CS = 5;
 
 // --- Globals ------------------------------------------------------
 // Objects are heap-allocated in setup() because GameRunner requires
-// references to FileParser and SceneRunner at construction time.
-static ESP32FileParser*  gFileParser  = nullptr;
+// references to FileOperator and SceneRunner at construction time.
+static ESP32FileOperator*  gFileOperator  = nullptr;
 static ESP32SceneRunner* gSceneRunner = nullptr;
 static GameRunner*       gGame        = nullptr;
 
@@ -42,9 +42,9 @@ void setup()
     Serial.println("[KSC] SD ready.");
 
     // Build the runner stack and load the opening scene
-    gFileParser  = new ESP32FileParser();
+    gFileOperator  = new ESP32FileOperator();
     gSceneRunner = new ESP32SceneRunner();
-    gGame        = new GameRunner(*gFileParser, *gSceneRunner);
+    gGame        = new GameRunner(*gFileOperator, *gSceneRunner, "locations", "", "", "/KSC_GAME/SAVED_GAMES");
 
     gGame->loadScene("/BANNERS/START_SCREEN/Start_Screen.json");
 }

@@ -3,15 +3,16 @@
  */
 
 #pragma once
-#include "../SHARED/FILE_PARSER/FileParser.h"
+#include "../SHARED/FILE_OPERATOR/FileOperator.h"
 #include <SD.h>
 #include <string>
+#include <vector>
 
 /**
- * ESP32 implementation of FileParser.
+ * ESP32 implementation of FileOperator.
  * Reads files from the SD card using the Arduino SD library.
  */
-class ESP32FileParser : public FileParser
+class ESP32FileOperator : public FileOperator
 {
 public:
     std::string load(const std::string& path) override
@@ -46,5 +47,21 @@ public:
             file.print(content.c_str());
             file.close();
         }
+    }
+
+    std::vector<std::string> listDirectory(const std::string& path) override
+    {
+        std::vector<std::string> entries;
+        File dir = SD.open(path.c_str());
+        if (!dir) return entries;
+        while (true)
+        {
+            File entry = dir.openNextFile();
+            if (!entry) break;
+            entries.push_back(std::string(entry.name()));
+            entry.close();
+        }
+        dir.close();
+        return entries;
     }
 };

@@ -8,13 +8,14 @@
 #include "../SCENE/SceneFactory.h"
 #include "../SCENE_VIEW/SceneView.h"
 #include "../CONTROLS_VIEW/ControlsView.h"
+#include "GameStartManager.h"
 
-class FileParser;
+class FileOperator;
 class GraphicsRenderer;
 class Scene;
 
 /**
- * Owns the active game state and the active Scene. Uses an injected FileParser
+ * Owns the active game state and the active Scene. Uses an injected FileOperator
  * to load scene JSON from storage and a SceneFactory to build the Scene.
  * Delegates scene rendering to SceneView and controls rendering to ControlsView,
  * both of which use an injected GraphicsRenderer.
@@ -22,11 +23,12 @@ class Scene;
 class GameRunner
 {
 public:
-    GameRunner(FileParser&       fileParser,
+    GameRunner(FileOperator&       fileParser,
                GraphicsRenderer& renderer,
                std::string       mode       = "locations",
                std::string       locationID = "",
-               std::string       noteID     = "");
+               std::string       noteID     = "",
+               std::string       saveDir    = "");
 
     /**
      * Render the active scene and controls via their respective views.
@@ -50,11 +52,12 @@ public:
     std::string getCurrentNoteID()     const;
 
 private:
-    FileParser&            mFileParser;
+    FileOperator&            mFileOperator;
     GraphicsRenderer&      mRenderer;
     SceneView              mSceneView;
     ControlsView           mControlsView;
     SceneFactory           mSceneFactory;
+    GameStartManager       mGameStartManager;
     std::unique_ptr<Scene> mActiveScene;
     bool                   mOverlayVisible = false;
 
@@ -64,6 +67,7 @@ private:
 
     void discoverNote(const std::string& notePath);
     void discoverSceneNote(const std::string& scenePath, const std::string& sceneJson);
+    void refreshNote(const std::string& clueArrayKey);
     void dispatchCallback(const std::string& callbackId);
     void syncControlsState();
 };
