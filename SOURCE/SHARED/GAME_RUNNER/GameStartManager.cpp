@@ -7,6 +7,16 @@ GameStartManager::GameStartManager(FileOperator& fileOperator, std::string saveD
 {
 }
 
+void GameStartManager::setSaveDir(const std::string& dir)
+{
+    mSaveDir = dir;
+}
+
+std::string GameStartManager::getSaveDir() const
+{
+    return mSaveDir;
+}
+
 int GameStartManager::findNextSlotIndex()
 {
     int highest = -1;

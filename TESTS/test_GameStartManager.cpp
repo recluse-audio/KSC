@@ -36,6 +36,19 @@ static std::string runSaveAndReadSlot(TestFileOperator& fileOp)
     return fileOp.load(k_OutputDir + "/KSC_SLOT_0/Game_State.json");
 }
 
+TEST_CASE("GameStartManager setSaveDir updates the save directory", "[GameStartManager]")
+{
+    TestFileOperator fileOp;
+    const std::string defaultDir = "/KSC_GAME/SAVED_GAMES";
+    const std::string newDir     = "TESTS/OUTPUT/GAME_START_MANAGER";
+
+    GameStartManager manager(fileOp, defaultDir);
+    REQUIRE(manager.getSaveDir() == defaultDir);
+
+    manager.setSaveDir(newDir);
+    REQUIRE(manager.getSaveDir() == newDir);
+}
+
 TEST_CASE("GameStartManager save copies golden Game_State.json into KSC_SLOT_0", "[GameStartManager]")
 {
     TestFileOperator fileOp;

@@ -176,6 +176,11 @@ void GameRunner::refreshNote(const std::string& clueArrayKey)
     }
 }
 
+void GameRunner::setSaveDir(const std::string& dir)
+{
+    mGameStartManager.setSaveDir(dir);
+}
+
 std::string GameRunner::getCurrentMode() const
 {
     return mCurrentMode;

@@ -47,6 +47,8 @@ public:
      */
     void loadScene(const std::string& path);
 
+    void setSaveDir(const std::string& dir);
+
     std::string getCurrentMode()       const;
     std::string getCurrentLocationID() const;
     std::string getCurrentNoteID()     const;

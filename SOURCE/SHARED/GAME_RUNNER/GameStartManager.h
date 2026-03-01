@@ -22,6 +22,13 @@ public:
     GameStartManager(FileOperator& fileOperator, std::string saveDir);
 
     /**
+     * Override the save directory at runtime. Replaces the directory set at
+     * construction. Pass an empty string to disable saving.
+     */
+    void        setSaveDir(const std::string& dir);
+    std::string getSaveDir() const;
+
+    /**
      * Copy KSC_DATA/GAME_STATE/ into saveDir/KSC_SLOT_N/ where N is the next
      * available slot index. No-op if saveDir is empty.
      */
