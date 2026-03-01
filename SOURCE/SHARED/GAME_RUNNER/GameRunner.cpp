@@ -123,6 +123,12 @@ void GameRunner::loadScene(const std::string& path)
 {
     mOverlayVisible = false;
     std::string json = mFileOperator.load(path);
+
+#ifdef ARDUINO
+    Serial.printf("[GR] loadScene: %s  json=%d bytes\n",
+        path.c_str(), (int)json.size());
+#endif
+
     mActiveScene = mSceneFactory.build(json);
 
     if (!mActiveScene->isDiscovered() && !mActiveScene->getNoteTarget().empty())
