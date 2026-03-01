@@ -42,9 +42,18 @@ void GameStartManager::save()
     int         slot    = findNextSlotIndex();
     std::string slotDir = mSaveDir + "/KSC_SLOT_" + std::to_string(slot);
 
-    for (const std::string& file : mFileOperator.listDirectory("/GAME_STATE"))
+    // Copy Game_State.json.
+    mFileOperator.writeToFile(slotDir + "/Game_State.json",
+                              mFileOperator.load("/GAME_STATE/Game_State.json"));
+
+    // Always copy NOTES_STATE: one subdirectory per note (e.g. AVERY, LIBRARY).
+    for (const std::string& noteDir : mFileOperator.listDirectory("/GAME_STATE/NOTES_STATE"))
     {
-        std::string content = mFileOperator.load("/GAME_STATE/" + file);
-        mFileOperator.writeToFile(slotDir + "/" + file, content);
+        const std::string noteBase = "/GAME_STATE/NOTES_STATE/" + noteDir;
+        for (const std::string& file : mFileOperator.listDirectory(noteBase))
+        {
+            std::string content = mFileOperator.load(noteBase + "/" + file);
+            mFileOperator.writeToFile(slotDir + "/NOTES_STATE/" + noteDir + "/" + file, content);
+        }
     }
 }

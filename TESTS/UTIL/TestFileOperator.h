@@ -51,14 +51,20 @@ public:
 
     std::vector<std::string> listDirectory(const std::string& dirPath) override
     {
-        // Resolve in-memory paths by prefix
+        // Resolve in-memory paths by prefix — return only direct children,
+        // deduplicating directory names (matches real filesystem behaviour).
         if (!dirPath.empty() && dirPath[0] == '/')
         {
             std::vector<std::string> names;
             std::string prefix = dirPath + "/";
             for (auto& [path, _] : files)
-                if (path.rfind(prefix, 0) == 0)
-                    names.push_back(path.substr(prefix.size()));
+            {
+                if (path.rfind(prefix, 0) != 0) continue;
+                std::string rel   = path.substr(prefix.size());
+                std::string child = rel.substr(0, rel.find('/'));
+                if (std::find(names.begin(), names.end(), child) == names.end())
+                    names.push_back(child);
+            }
             return names;
         }
 
