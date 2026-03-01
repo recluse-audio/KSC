@@ -15,9 +15,16 @@
 class ESP32FileOperator : public FileOperator
 {
 public:
+    static std::string sdPath(const std::string& path)
+    {
+        if (!path.empty() && path[0] == '/')
+            return std::string("/KSC_DATA") + path;
+        return path;
+    }
+
     std::string load(const std::string& path) override
     {
-        File file = SD.open(path.c_str());
+        File file = SD.open(sdPath(path).c_str());
         if (!file)
             return "";
 
@@ -31,7 +38,7 @@ public:
 
     void writeToFile(const std::string& path, const std::string& content) override
     {
-        File file = SD.open(path.c_str(), FILE_WRITE);
+        File file = SD.open(sdPath(path).c_str(), FILE_WRITE);
         if (file)
         {
             file.print(content.c_str());
@@ -41,7 +48,7 @@ public:
 
     void appendToFile(const std::string& path, const std::string& content) override
     {
-        File file = SD.open(path.c_str(), FILE_APPEND);
+        File file = SD.open(sdPath(path).c_str(), FILE_APPEND);
         if (file)
         {
             file.print(content.c_str());
@@ -52,7 +59,7 @@ public:
     std::vector<std::string> listDirectory(const std::string& path) override
     {
         std::vector<std::string> entries;
-        File dir = SD.open(path.c_str());
+        File dir = SD.open(sdPath(path).c_str());
         if (!dir) return entries;
         while (true)
         {

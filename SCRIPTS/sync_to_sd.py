@@ -14,6 +14,7 @@ import argparse
 import shutil
 import string
 import os
+import subprocess
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).parent.parent
@@ -34,18 +35,23 @@ def find_sd_card():
                 except:
                     continue
         except ImportError:
-            # Fallback: check common drive letters
-            print("Note: pywin32 not installed, checking common drive letters...")
+            # Fallback: use `vol` command to read volume label without pywin32
+            print("Note: pywin32 not installed, reading volume labels via vol command...")
             for letter in string.ascii_uppercase:
                 drive = f"{letter}:\\"
-                if os.path.exists(drive):
-                    # Try to read volume name via dir command (less reliable)
-                    print(f"  Checking {drive}")
-                    # For now, just check if SD folder exists as a hint
-                    if os.path.exists(f"{drive}KSC_DATA"):
-                        response = input(f"  Found KSC_DATA folder at {drive}. Is this KSC_SD? (y/n): ")
-                        if response.lower() == 'y':
-                            return Path(drive)
+                if not os.path.exists(drive):
+                    continue
+                try:
+                    result = subprocess.run(
+                        ["vol", f"{letter}:"],
+                        capture_output=True, text=True, shell=True
+                    )
+                    first_line = result.stdout.splitlines()[0] if result.stdout else ""
+                    if "KSC_SD" in first_line:
+                        print(f"  Found KSC_SD at {drive}")
+                        return Path(drive)
+                except Exception:
+                    continue
     return None
 
 DEST = None  # Will be set in main() after finding SD card
