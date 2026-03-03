@@ -2,6 +2,10 @@
   "currentMode": "locations",
   "currentLocation": "",
   "currentNote": "",
+  "notes": [
+    "/GAME_STATE/NOTES_STATE/AVERY/Avery_Note.md",
+    "/GAME_STATE/NOTES_STATE/LIBRARY/Library_Note.md"
+  ],
   "avery_locations": {
     "/LOCATIONS/AVERY/ROOT/Avery_Full.json": true,
     "/LOCATIONS/AVERY/CABLE_CABINET/DRAWER/DRAWER_1/Avery_Cable_Cabinet_Drawer_1.json": true,

@@ -28,6 +28,11 @@ public:
     void drawText(const std::string& path, int x, int y) override;
     void drawSVG(const std::string& path, int x, int y, int w = 0, int h = 0) override;
     void drawButton(const std::string& label, int x, int y, int w, int h) override;
+    void beginContentArea(int x, int y, int w, int h) override;
+    void endContentArea() override;
+
+    /** Convert a screen-space pixel position to 320x240 game coordinates. */
+    void toGameCoords(int screenX, int screenY, int& gameX, int& gameY) const;
 
 private:
     std::string mCachedPath;

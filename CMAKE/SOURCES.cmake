@@ -9,8 +9,8 @@ set(KSC_SOURCES
     SOURCE/SHARED/GRAPHICS_RENDERER/GraphicsRenderer.h
     SOURCE/SHARED/SCENE_VIEW/SceneView.h
     SOURCE/SHARED/SCENE_VIEW/SceneView.cpp
-    SOURCE/SHARED/CONTROLS_VIEW/ControlsView.h
-    SOURCE/SHARED/CONTROLS_VIEW/ControlsView.cpp
+    SOURCE/SHARED/BAR/ControlBarSection.h
+    SOURCE/SHARED/BAR/ControlBarSection.cpp
     SOURCE/SHARED/GAME_RUNNER/GameRunner.cpp
     SOURCE/SHARED/GAME_RUNNER/GameRunner.h
     SOURCE/SHARED/GAME_RUNNER/GameStartManager.cpp

@@ -1,10 +1,11 @@
 {
   "id": "AVERY_DESK_COMPUTER_FILES_UNTITLED_FILE",
   "name": "Untitled File",
+  "lores_image_path": "/LOCATIONS/AVERY/DESK/COMPUTER/FILES/UNTITLED_FILE/Avery_Desk_Computer_Files_Untitled_File_Summary.md",
+  "hires_image_path": "",
   "parent": "AVERY_DESK_COMPUTER",
   "parent_path": "/LOCATIONS/AVERY/DESK/COMPUTER/Avery_Desk_Computer.json",
   "isDiscovered": false,
-  "primary_path": "/LOCATIONS/AVERY/DESK/COMPUTER/FILES/UNTITLED_FILE/Avery_Desk_Computer_Files_Untitled_File_Summary.md",
   "secondary_path": "",
   "zones": []
 }

@@ -15,8 +15,17 @@ class SceneFactory
 {
 public:
     /**
+     * useHires — if true, primaryPath is read from "hires_image_path";
+     *            if false (default), from "lores_image_path".
+     */
+    explicit SceneFactory(bool useHires = false);
+
+    /**
      * Parse the given JSON string and return a heap-allocated Scene.
      * Ownership is transferred to the caller via unique_ptr.
      */
     std::unique_ptr<Scene> build(const std::string& jsonString);
+
+private:
+    bool mUseHires;
 };

@@ -1,17 +1,20 @@
-
 {
   "id": "AVERY_DESK_COMPUTER",
   "name": "Computer",
+  "lores_image_path": "/LOCATIONS/AVERY/DESK/COMPUTER/Avery_Computer_320x240.png",
+  "hires_image_path": "/LOCATIONS/AVERY/DESK/COMPUTER/Avery_Computer.png",
   "parent": "AVERY_DESK",
   "parent_path": "/LOCATIONS/AVERY/DESK/MAIN/Avery_Desk.json",
   "isDiscovered": true,
-  "primary_path": "/LOCATIONS/AVERY/DESK/COMPUTER/Avery_Desk_Computer_320x240.png",
   "secondary_path": "/LOCATIONS/AVERY/DESK/COMPUTER/Avery_Desk_Computer_Summary.md",
   "zones": [
     {
       "id": "open_file_manager",
       "label": "Files",
-      "x": 80, "y": 80, "width": 200, "height": 100
+      "x": 80,
+      "y": 80,
+      "width": 200,
+      "height": 100
     }
   ]
 }

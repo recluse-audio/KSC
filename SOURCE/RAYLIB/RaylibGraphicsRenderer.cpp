@@ -4,8 +4,35 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <algorithm>
 
-static const int SCALE = 2;
+// ---------------------------------------------------------------------------
+// Helpers — all rendering uses 320x240 virtual coordinates.
+// gameScale() fits that canvas into the current window while preserving ratio.
+// gameOffset() returns the top-left pixel of the letterboxed canvas.
+// ---------------------------------------------------------------------------
+// GetRenderWidth/Height returns the actual framebuffer size in physical pixels,
+// which is what all Raylib draw calls operate in. GetScreenWidth/Height can
+// return logical (DPI-unscaled) dimensions on Windows, causing a mismatch.
+static float gameScale()
+{
+    return std::min(GetRenderWidth() / 320.0f, GetRenderHeight() / 240.0f);
+}
+
+static Vector2 gameOffset()
+{
+    float s = gameScale();
+    return { (GetRenderWidth()  - 320.0f * s) / 2.0f,
+             (GetRenderHeight() - 240.0f * s) / 2.0f };
+}
+
+// Game-space coord → screen pixel (with letterbox offset)
+static float gx(float vx) { return gameOffset().x + vx * gameScale(); }
+static float gy(float vy) { return gameOffset().y + vy * gameScale(); }
+// Game-space dimension → screen pixels (no offset)
+static float gp(float v)  { return v * gameScale(); }
+
+// ---------------------------------------------------------------------------
 
 RaylibGraphicsRenderer::~RaylibGraphicsRenderer()
 {
@@ -25,6 +52,17 @@ std::string RaylibGraphicsRenderer::sdPath(const std::string& path)
     return path;
 }
 
+void RaylibGraphicsRenderer::toGameCoords(int screenX, int screenY,
+                                           int& gameX,  int& gameY) const
+{
+    // Mouse position from Raylib is already in render (physical pixel) space,
+    // so the same scale/offset used for drawing applies here.
+    float   s   = gameScale();
+    Vector2 off = gameOffset();
+    gameX = (int)((screenX - off.x) / s);
+    gameY = (int)((screenY - off.y) / s);
+}
+
 // -----------------------------------------------------------------
 void RaylibGraphicsRenderer::drawImage(const std::string& path)
 {
@@ -36,8 +74,8 @@ void RaylibGraphicsRenderer::drawText(const std::string& path, int /*x*/, int y)
     std::string full = sdPath(path);
     if (y > 0)
     {
-        DrawRectangle(0, 17 * SCALE, GetScreenWidth(),
-                      GetScreenHeight() - 17 * SCALE, {0, 0, 0, 200});
+        DrawRectangle((int)gx(0), (int)gy(17),
+                      (int)gp(320), (int)gp(240 - 17), {0, 0, 0, 200});
         drawMarkdown(full, y, 0.5f, false);
     }
     else
@@ -51,18 +89,31 @@ void RaylibGraphicsRenderer::drawSVG(const std::string& path, int x, int y, int 
     drawSvgAt(sdPath(path), x, y, w, h);
 }
 
+void RaylibGraphicsRenderer::beginContentArea(int x, int y, int w, int h)
+{
+    BeginScissorMode((int)gx(x), (int)gy(y), (int)gp(w), (int)gp(h));
+}
+
+void RaylibGraphicsRenderer::endContentArea()
+{
+    EndScissorMode();
+}
+
 void RaylibGraphicsRenderer::drawButton(const std::string& label, int x, int y, int w, int h)
 {
     if (mFont.texture.id == 0)
-        mFont = LoadFontEx("KSC_DATA/GUI/anonymous_pro_bold.ttf", 32, nullptr, 0);
+        mFont = LoadFontEx("KSC_DATA/GUI/ASSETS/OcrB2.ttf", 32, nullptr, 0);
 
-    DrawRectangle(x * SCALE, y * SCALE, w * SCALE, h * SCALE, {0, 0, 0, 220});
-    DrawRectangleLines(x * SCALE, y * SCALE, w * SCALE, h * SCALE, WHITE);
-    float fontSize = (float)(9 * SCALE);
-    Vector2 textSize = MeasureTextEx(mFont, label.c_str(), fontSize, 1.0f);
-    float textX = x * SCALE + (w * SCALE - textSize.x) / 2.0f;
-    float textY = y * SCALE + (h * SCALE - textSize.y) / 2.0f;
-    DrawTextEx(mFont, label.c_str(), {textX, textY}, fontSize, 1.0f, WHITE);
+    float bx = gx(x), by = gy(y), bw = gp(w), bh = gp(h);
+    DrawRectangle((int)bx, (int)by, (int)bw, (int)bh, {0, 0, 0, 220});
+    DrawRectangleLines((int)bx, (int)by, (int)bw, (int)bh, WHITE);
+
+    float    fontSize = gp(9);
+    Vector2  textSize = MeasureTextEx(mFont, label.c_str(), fontSize, 1.0f);
+    DrawTextEx(mFont, label.c_str(),
+               { bx + (bw - textSize.x) / 2.0f,
+                 by + (bh - textSize.y) / 2.0f },
+               fontSize, 1.0f, WHITE);
 }
 
 // -----------------------------------------------------------------
@@ -76,12 +127,24 @@ void RaylibGraphicsRenderer::drawPng(const std::string& fullPath)
         mCachedPath    = fullPath;
     }
     if (mCachedTexture.id > 0)
-        DrawTextureEx(mCachedTexture, {0, 0}, 0.0f, (float)SCALE, WHITE);
+    {
+        Rectangle src = { 0, 0,
+                          (float)mCachedTexture.width,
+                          (float)mCachedTexture.height };
+        Vector2 off = gameOffset();
+        float   s   = gameScale();
+        Rectangle dst = { off.x, off.y, 320.0f * s, 240.0f * s };
+        DrawTexturePro(mCachedTexture, src, dst, {0, 0}, 0.0f, WHITE);
+    }
 }
 
-void RaylibGraphicsRenderer::drawSvgAt(const std::string& fullPath, int x, int y, int targetW, int targetH)
+void RaylibGraphicsRenderer::drawSvgAt(const std::string& fullPath,
+                                        int x, int y, int targetW, int targetH)
 {
-    std::string cacheKey = fullPath + "@" + std::to_string(targetW) + "x" + std::to_string(targetH);
+    // Rasterize at 4× for quality; DrawTexturePro scales to current window size.
+    static const int RASTER_SCALE = 4;
+    std::string cacheKey = fullPath + "@" + std::to_string(targetW)
+                                    + "x" + std::to_string(targetH);
 
     if (mSvgCache.find(cacheKey) == mSvgCache.end())
     {
@@ -95,46 +158,51 @@ void RaylibGraphicsRenderer::drawSvgAt(const std::string& fullPath, int x, int y
         NSVGimage* image = nsvgParse(buf.data(), "px", 96.0f);
         if (!image) return;
 
-        float svgW = image->width;
-        float svgH = image->height;
+        float svgW = image->width, svgH = image->height;
         if (svgW <= 0 || svgH <= 0) { nsvgDelete(image); return; }
 
-        int rasterW = (targetW > 0) ? targetW * SCALE : (int)svgW;
-        int rasterH = (targetH > 0) ? targetH * SCALE : (int)svgH;
-        float scale = (targetW > 0) ? (float)rasterW / svgW : 1.0f;
+        int   rasterW = (targetW > 0) ? targetW * RASTER_SCALE : (int)svgW;
+        int   rasterH = (targetH > 0) ? targetH * RASTER_SCALE : (int)svgH;
+        float scale   = (targetW > 0) ? (float)rasterW / svgW  : 1.0f;
 
         NSVGrasterizer* rast = nsvgCreateRasterizer();
         std::vector<uint8_t> pixels(rasterW * rasterH * 4);
-        nsvgRasterize(rast, image, 0.0f, 0.0f, scale, pixels.data(), rasterW, rasterH, rasterW * 4);
+        nsvgRasterize(rast, image, 0, 0, scale,
+                      pixels.data(), rasterW, rasterH, rasterW * 4);
         nsvgDeleteRasterizer(rast);
         nsvgDelete(image);
 
-        // Force all pixels to white, preserving alpha
         for (size_t i = 0; i < pixels.size(); i += 4)
-        {
-            pixels[i]     = 255;
-            pixels[i + 1] = 255;
-            pixels[i + 2] = 255;
-        }
+            pixels[i] = pixels[i+1] = pixels[i+2] = 255;
 
-        Image img = { (void*)pixels.data(), rasterW, rasterH, 1, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8 };
+        Image img = { pixels.data(), rasterW, rasterH, 1,
+                      PIXELFORMAT_UNCOMPRESSED_R8G8B8A8 };
         mSvgCache[cacheKey] = LoadTextureFromImage(img);
     }
 
     const Texture2D& tex = mSvgCache.at(cacheKey);
-    if (tex.id > 0)
-        DrawTextureEx(tex, {(float)(x * SCALE), (float)(y * SCALE)}, 0.0f, 1.0f, WHITE);
+    if (tex.id <= 0) return;
+
+    Rectangle src = { 0, 0, (float)tex.width, (float)tex.height };
+    Rectangle dst = { gx(x), gy(y), gp(targetW), gp(targetH) };
+    DrawTexturePro(tex, src, dst, {0, 0}, 0.0f, WHITE);
 }
 
-void RaylibGraphicsRenderer::drawMarkdown(const std::string& fullPath, int startY, float textScale, bool applyScroll)
+void RaylibGraphicsRenderer::drawMarkdown(const std::string& fullPath,
+                                           int startY, float textScale,
+                                           bool applyScroll)
 {
     std::ifstream file(fullPath);
     if (!file.is_open()) return;
 
     if (mFont.texture.id == 0)
-        mFont = LoadFontEx("KSC_DATA/GUI/anonymous_pro_bold.ttf", 32, nullptr, 0);
+        mFont = LoadFontEx("KSC_DATA/GUI/ASSETS/OcrB2.ttf", 32, nullptr, 0);
 
-    int y = startY * SCALE - (applyScroll ? mScrollOffset : 0);
+    float contentTop    = gy(15);
+    float contentBottom = gy(225);
+    float yPos = applyScroll ? contentTop - (float)mScrollOffset
+                             : gy(startY);
+
     std::string line;
     while (std::getline(file, line))
     {
@@ -145,13 +213,15 @@ void RaylibGraphicsRenderer::drawMarkdown(const std::string& fullPath, int start
                               ? line.substr(hashes + 1)
                               : line;
 
-        float fontSize = (float)(((hashes == 1) ? 14 : (hashes == 2) ? 11 : 9) * SCALE * textScale);
-        int   lineH    = (int)(fontSize + 4 * SCALE * textScale);
+        float fontSize = gp((float)((hashes == 1) ? 14 : (hashes == 2) ? 11 : 9)
+                            * textScale);
+        float lineH    = fontSize + gp(4 * textScale);
         Color color    = (hashes > 0) ? WHITE : LIGHTGRAY;
 
-        if (y + lineH > 0 && y < GetScreenHeight())
-            DrawTextEx(mFont, display.c_str(), {(float)(10 * SCALE), (float)y}, fontSize, 1.0f, color);
+        if (yPos + lineH > contentTop && yPos < contentBottom)
+            DrawTextEx(mFont, display.c_str(), { gx(10), yPos },
+                       fontSize, 1.0f, color);
 
-        y += lineH;
+        yPos += lineH;
     }
 }

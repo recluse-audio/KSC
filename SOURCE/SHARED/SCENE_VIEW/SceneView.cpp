@@ -3,6 +3,11 @@
 #include "../SCENE/Scene.h"
 #include "../ZONE/Zone.h"
 
+static const int CONTENT_X = 0;
+static const int CONTENT_Y = 15;
+static const int CONTENT_W = 320;
+static const int CONTENT_H = 210; // 225 - 15
+
 SceneView::SceneView(GraphicsRenderer& renderer)
 : mRenderer(renderer)
 {
@@ -28,27 +33,46 @@ static void drawPath(GraphicsRenderer& renderer, const std::string& path, int x,
 
 void SceneView::draw(const Scene& scene, bool overlayVisible)
 {
-    if (scene.getPrimaryPath().empty())
+    const std::string& primary = scene.getPrimaryPath();
+
+    if (primary.empty())
     {
+        mRenderer.beginContentArea(CONTENT_X, CONTENT_Y, CONTENT_W, CONTENT_H);
         for (auto zone : scene.getZones())
         {
             Zone::Bounds b = zone.getBounds();
             mRenderer.drawButton(zone.getLabel(), b.mX, b.mY, b.mW, b.mH);
         }
+        mRenderer.endContentArea();
         return;
     }
 
-    drawPath(mRenderer, scene.getPrimaryPath(), 0, 0);
+    if (endsWith(primary, ".png"))
+    {
+        drawPath(mRenderer, primary, 0, 0);
+    }
+    else
+    {
+        mRenderer.beginContentArea(CONTENT_X, CONTENT_Y, CONTENT_W, CONTENT_H);
+        drawPath(mRenderer, primary, 0, 0);
+        mRenderer.endContentArea();
+    }
 
     if (overlayVisible)
+    {
+        mRenderer.beginContentArea(CONTENT_X, CONTENT_Y, CONTENT_W, CONTENT_H);
         drawPath(mRenderer, scene.getSecondaryPath(), 0, 20);
+        mRenderer.endContentArea();
+    }
 }
 
 void SceneView::drawMenu(const Scene& menuScene)
 {
+    mRenderer.beginContentArea(CONTENT_X, CONTENT_Y, CONTENT_W, CONTENT_H);
     for (auto zone : menuScene.getZones())
     {
         Zone::Bounds b = zone.getBounds();
         mRenderer.drawButton(zone.getLabel(), b.mX, b.mY, b.mW, b.mH);
     }
+    mRenderer.endContentArea();
 }

@@ -4,6 +4,11 @@
 
 using json = nlohmann::json;
 
+SceneFactory::SceneFactory(bool useHires)
+: mUseHires(useHires)
+{
+}
+
 std::unique_ptr<Scene> SceneFactory::build(const std::string& jsonString)
 {
     json j = json::parse(jsonString, nullptr, false); // false = no exceptions
@@ -13,7 +18,10 @@ std::unique_ptr<Scene> SceneFactory::build(const std::string& jsonString)
     std::string sceneID       = j.value("id",             "");
     std::string parentID      = j.value("parent",         "Main");
     std::string name          = j.value("name",           "");
-    std::string primaryPath   = j.value("primary_path",   "");
+    std::string primaryPath   = mUseHires ? j.value("hires_image_path", "")
+                                          : j.value("lores_image_path",  "");
+    if (primaryPath.empty())
+        primaryPath = j.value("lores_image_path", "");
     std::string secondaryPath = j.value("secondary_path", "");
 
     auto scene = std::make_unique<Scene>(sceneID, parentID, name, primaryPath, secondaryPath);

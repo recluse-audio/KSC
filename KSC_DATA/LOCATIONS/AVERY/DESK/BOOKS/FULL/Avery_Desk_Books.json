@@ -1,30 +1,40 @@
 {
   "id": "AVERY_DESK_BOOKS",
   "name": "Books",
+  "lores_image_path": "/LOCATIONS/AVERY/DESK/BOOKS/FULL/Avery_Books_320x240.png",
+  "hires_image_path": "/LOCATIONS/AVERY/DESK/BOOKS/FULL/Avery_Books.png",
   "parent": "AVERY_DESK",
   "parent_path": "/LOCATIONS/AVERY/DESK/MAIN/Avery_Desk.json",
   "isDiscovered": true,
-  "primary_path": "/LOCATIONS/AVERY/DESK/BOOKS/FULL/Avery_Desk_Books_320x240.png",
   "secondary_path": "/LOCATIONS/AVERY/DESK/BOOKS/FULL/Avery_Desk_Books_Summary.md",
   "zones": [
     {
       "id": "book_dsp",
       "label": "DSP Book",
-      "x": 0, "y": 30, "width": 107, "height": 210,
+      "x": 0,
+      "y": 30,
+      "width": 107,
+      "height": 210,
       "action": "navigate",
       "target": "/LOCATIONS/AVERY/DESK/BOOKS/DSP_CLUE/DSP_Clue.json"
     },
     {
       "id": "book_sql",
       "label": "SQL Book",
-      "x": 107, "y": 30, "width": 106, "height": 210,
+      "x": 107,
+      "y": 30,
+      "width": 106,
+      "height": 210,
       "action": "navigate",
       "target": "/LOCATIONS/AVERY/DESK/BOOKS/SQL_CLUE/SQL_CLUE.json"
     },
     {
       "id": "book_infinitejest",
       "label": "Infinite Jest",
-      "x": 213, "y": 30, "width": 107, "height": 210,
+      "x": 213,
+      "y": 30,
+      "width": 107,
+      "height": 210,
       "action": "navigate",
       "target": "/LOCATIONS/AVERY/DESK/BOOKS/INFINITE_JEST/Avery_Desk_Books_Infinite_Jest.json"
     }

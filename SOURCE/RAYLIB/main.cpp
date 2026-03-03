@@ -28,12 +28,14 @@ int main()
         ChangeDirectory(dir.string().c_str());
     }
 
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(SCREEN_W, SCREEN_H, "KSC");
+    SetWindowMinSize(320, 240);
     SetTargetFPS(60);
 
     RaylibFileOperator       fileParser;
     RaylibGraphicsRenderer renderer;
-    GameRunner             game(fileParser, renderer, "locations", "", "", "C:/KSC_GAME/SAVED_GAMES");
+    GameRunner             game(fileParser, renderer, "locations", "", "C:/KSC_GAME/SAVED_GAMES", true);
 
     game.loadScene("/BANNERS/START_SCREEN/Start_Screen.json");
 
@@ -43,7 +45,9 @@ int main()
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
         {
             Vector2 mouse = GetMousePosition();
-            game.registerHit((int)mouse.x / SCALE, (int)mouse.y / SCALE);
+            int gx, gy;
+            renderer.toGameCoords((int)mouse.x, (int)mouse.y, gx, gy);
+            game.registerHit(gx, gy);
         }
 
         float wheel = GetMouseWheelMove();

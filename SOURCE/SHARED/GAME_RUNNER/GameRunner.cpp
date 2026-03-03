@@ -2,22 +2,24 @@
 #include "../FILE_OPERATOR/FileOperator.h"
 #include "../GRAPHICS_RENDERER/GraphicsRenderer.h"
 #include "../SCENE/Scene.h"
+#include <algorithm>
 #include <nlohmann/json.hpp>
 
 GameRunner::GameRunner(FileOperator& fileParser, GraphicsRenderer& renderer,
-                       std::string mode, std::string locationID, std::string noteID,
-                       std::string saveDir)
+                       std::string mode, std::string locationID,
+                       std::string saveDir, bool useHires)
 : mFileOperator(fileParser)
 , mRenderer(renderer)
 , mSceneView(renderer)
-, mControlsView(renderer)
+, mTopBar(renderer)
+, mBottomBar(renderer)
+, mSceneFactory(useHires)
 , mGameStartManager(fileParser, std::move(saveDir))
 , mCurrentMode(mode)
 , mCurrentLocationID(locationID)
-, mCurrentNoteID(noteID)
 {
-    std::string controlsJson = mFileOperator.load("/GUI/Controls_View.json");
-    mControlsView.load(controlsJson);
+    mTopBar.load(mFileOperator.load("/GUI/Top_Bar.json"));
+    mBottomBar.load(mFileOperator.load("/GUI/Bottom_Bar.json"));
 }
 
 void GameRunner::draw()
@@ -27,14 +29,17 @@ void GameRunner::draw()
     mSceneView.draw(*mActiveScene, mOverlayVisible);
     if (mFileMenuVisible && mFileMenuScene)
         mSceneView.drawMenu(*mFileMenuScene);
-    mControlsView.draw();
+    // Bars drawn last so they are never obstructed by scene content.
+    mTopBar.draw();
+    mBottomBar.draw();
 }
 
 void GameRunner::registerHit(int x, int y)
 {
     if (!mActiveScene) return;
 
-    std::string cb = mControlsView.handleHit(x, y);
+    std::string cb = mTopBar.handleHit(x, y);
+    if (cb.empty()) cb = mBottomBar.handleHit(x, y);
     if (!cb.empty())
     {
         dispatchCallback(cb);
@@ -87,21 +92,43 @@ void GameRunner::dispatchCallback(const std::string& callbackId)
     }
     else if (callbackId == "navigatePrev")
     {
-        // TODO: navigate to previous root location/note
+        if (mCurrentMode == "notes" && !mNoteList.empty())
+        {
+            mNoteIndex = (mNoteIndex - 1 + (int)mNoteList.size()) % (int)mNoteList.size();
+            loadNote(mNoteList[mNoteIndex]);
+        }
     }
     else if (callbackId == "navigateNext")
     {
-        // TODO: navigate to next root location/note
+        if (mCurrentMode == "notes" && !mNoteList.empty())
+        {
+            mNoteIndex = (mNoteIndex + 1) % (int)mNoteList.size();
+            loadNote(mNoteList[mNoteIndex]);
+        }
     }
     else if (callbackId == "switchToLocations")
     {
         mCurrentMode = "locations";
-        syncControlsState();
+        if (!mLastLocationPath.empty())
+            loadScene(mLastLocationPath);
+        else
+            syncControlsState();
     }
     else if (callbackId == "switchToNotes")
     {
         mCurrentMode = "notes";
-        syncControlsState();
+        if (mNoteList.empty())
+        {
+            std::string stateJson = mFileOperator.load("/GAME_STATE/Game_State.json");
+            nlohmann::json j = nlohmann::json::parse(stateJson, nullptr, false);
+            if (!j.is_discarded() && j.contains("notes"))
+                for (auto& n : j["notes"])
+                    mNoteList.push_back(n.get<std::string>());
+        }
+        if (!mNoteList.empty())
+            loadNote(mNoteList[mNoteIndex]);
+        else
+            syncControlsState();
     }
     else if (callbackId == "open_file_manager")
     {
@@ -121,12 +148,13 @@ void GameRunner::dispatchCallback(const std::string& callbackId)
 
 void GameRunner::syncControlsState()
 {
-    ControlsState state;
+    BarState state;
     state.isRoot         = mActiveScene ? mActiveScene->isRoot() : false;
     state.overlayVisible = mOverlayVisible;
     state.hasParent      = mActiveScene && !mActiveScene->getParentPath().empty();
     state.mode           = mCurrentMode;
-    mControlsView.setState(state);
+    mTopBar.setState(state);
+    mBottomBar.setState(state);
 }
 
 void GameRunner::discoverSceneNote(const std::string& scenePath, const std::string& sceneJson)
@@ -158,9 +186,21 @@ void GameRunner::loadScene(const std::string& path)
 
     mActiveScene = mSceneFactory.build(json);
 
+    if (mCurrentMode == "locations")
+        mLastLocationPath = path;
+
     if (!mActiveScene->isDiscovered() && !mActiveScene->getNoteTarget().empty())
         discoverSceneNote(path, json);
 
+    syncControlsState();
+}
+
+void GameRunner::loadNote(const std::string& mdPath)
+{
+    mOverlayVisible  = false;
+    mFileMenuVisible = false;
+    mScrollOffset    = 0;
+    mActiveScene     = std::make_unique<Scene>("NOTE", "", "", mdPath, "");
     syncControlsState();
 }
 
@@ -225,7 +265,7 @@ std::string GameRunner::getCurrentLocationID() const
 
 std::string GameRunner::getCurrentNoteID() const
 {
-    return mCurrentNoteID;
+    return mNoteIndex < (int)mNoteList.size() ? mNoteList[mNoteIndex] : "";
 }
 
 bool GameRunner::isFileMenuVisible() const

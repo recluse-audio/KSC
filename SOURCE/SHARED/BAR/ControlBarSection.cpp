@@ -1,13 +1,13 @@
-#include "ControlsView.h"
+#include "ControlBarSection.h"
 #include "../GRAPHICS_RENDERER/GraphicsRenderer.h"
 #include <nlohmann/json.hpp>
 
-ControlsView::ControlsView(GraphicsRenderer& renderer)
+ControlBarSection::ControlBarSection(GraphicsRenderer& renderer)
 : mRenderer(renderer)
 {
 }
 
-void ControlsView::load(const std::string& json)
+void ControlBarSection::load(const std::string& json)
 {
     mButtons.clear();
     auto j = nlohmann::json::parse(json, nullptr, false);
@@ -28,20 +28,22 @@ void ControlsView::load(const std::string& json)
     }
 }
 
-void ControlsView::setState(const ControlsState& state)
+void ControlBarSection::setState(const BarState& state)
 {
     mState = state;
 }
 
-bool ControlsView::isButtonVisible(const Button& btn) const
+bool ControlBarSection::isButtonVisible(const Button& btn) const
 {
-    if (btn.visibleWhen == "always")  return true;
-    if (btn.visibleWhen == "root")    return mState.isRoot;
-    if (btn.visibleWhen == "nonRoot") return !mState.isRoot;
+    if (btn.visibleWhen == "always")    return true;
+    if (btn.visibleWhen == "root")      return mState.isRoot;
+    if (btn.visibleWhen == "nonRoot")   return !mState.isRoot;
+    if (btn.visibleWhen == "notesMode")        return mState.mode == "notes";
+    if (btn.visibleWhen == "locationsNonRoot") return mState.mode != "notes" && !mState.isRoot;
     return false;
 }
 
-void ControlsView::draw()
+void ControlBarSection::draw()
 {
     for (const auto& btn : mButtons)
     {
@@ -50,7 +52,7 @@ void ControlsView::draw()
     }
 }
 
-std::string ControlsView::handleHit(int x, int y) const
+std::string ControlBarSection::handleHit(int x, int y) const
 {
     for (const auto& btn : mButtons)
     {

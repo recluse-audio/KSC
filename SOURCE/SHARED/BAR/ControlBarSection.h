@@ -1,5 +1,5 @@
 /**
- * Made by Ryan Devens on 2026-02-26
+ * Made by Ryan Devens on 2026-03-03
  */
 
 #pragma once
@@ -9,10 +9,10 @@
 class GraphicsRenderer;
 
 /**
- * Snapshot of game state that ControlsView uses to decide which buttons
+ * Snapshot of game state that ControlBarSection uses to decide which buttons
  * are visible.
  */
-struct ControlsState
+struct BarState
 {
     bool        isRoot         = false;
     bool        overlayVisible = false;
@@ -21,20 +21,20 @@ struct ControlsState
 };
 
 /**
- * Renders the persistent navigation controls overlay and resolves hit tests
- * against control buttons. Loaded from a JSON data file via load().
+ * Renders a persistent navigation bar (top or bottom) and resolves hit tests
+ * against its buttons. Loaded from a JSON data file via load().
  *
  * draw() iterates visible buttons and calls mRenderer.drawSVG() for each icon.
  * handleHit() returns the callback identifier for the button at (x, y), or ""
  * if no visible button was hit.
  */
-class ControlsView
+class ControlBarSection
 {
 public:
-    explicit ControlsView(GraphicsRenderer& renderer);
+    explicit ControlBarSection(GraphicsRenderer& renderer);
 
     void        load(const std::string& json);
-    void        setState(const ControlsState& state);
+    void        setState(const BarState& state);
     void        draw();
     std::string handleHit(int x, int y) const;
 
@@ -48,12 +48,12 @@ private:
         int         h           = 0;
         std::string icon;
         std::string callback;
-        std::string visibleWhen; // "always", "root", "nonRoot"
+        std::string visibleWhen; // "always", "root", "nonRoot", "notesMode", "locationsNonRoot"
     };
 
     bool isButtonVisible(const Button& btn) const;
 
     GraphicsRenderer&   mRenderer;
     std::vector<Button> mButtons;
-    ControlsState       mState;
+    BarState            mState;
 };

@@ -1,10 +1,11 @@
 {
   "id": "AVERY_DESK_COMPUTER_FILES",
   "name": "Files",
+  "lores_image_path": "",
+  "hires_image_path": "",
   "parent": "AVERY_DESK_COMPUTER",
   "parent_path": "/LOCATIONS/AVERY/DESK/COMPUTER/Avery_Desk_Computer.json",
   "isDiscovered": true,
-  "primary_path": "",
   "secondary_path": "/LOCATIONS/AVERY/DESK/COMPUTER/FILES/Avery_Desk_Computer_Files_Summary.md",
   "zones": []
 }

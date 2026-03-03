@@ -1,4 +1,11 @@
-#### Low Latency DSP ####
 
-Avery had been inspecting a method of low-latency intercepting a microphone input, and modifying the source audio
-all before the llm filled its first inference buffer.
+#### Low Latency DSP
+
+Avery had been inspecting a method of using linear predictive coding
+to accomplish low-latency phoneme injection.
+
+This seems oddly specific, and I didn't realize he was such an 
+"Audio Guy". I wonder what got him so into embedded,
+low-latency audio programming?
+
+-------------------------------------------------------------------

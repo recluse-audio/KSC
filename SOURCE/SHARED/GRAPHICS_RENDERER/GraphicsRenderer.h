@@ -17,6 +17,9 @@ public:
 
     void setScrollOffset(int offset) { mScrollOffset = offset; }
 
+    virtual void beginContentArea(int x, int y, int w, int h) {}
+    virtual void endContentArea() {}
+
 protected:
     int mScrollOffset = 0;
 

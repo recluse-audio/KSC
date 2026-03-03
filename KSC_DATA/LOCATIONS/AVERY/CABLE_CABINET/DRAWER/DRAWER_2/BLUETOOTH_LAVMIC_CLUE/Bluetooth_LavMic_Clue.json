@@ -1,11 +1,12 @@
 {
   "id": "AVERY_CABLE_CABINET_DRAWER_2_BLUETOOTH_CLUE",
   "name": "Bluetooth Lavalier Mic",
+  "lores_image_path": "/LOCATIONS/AVERY/CABLE_CABINET/DRAWER/DRAWER_2/BLUETOOTH_LAVMIC_CLUE/Avery_BlueTooth_Lavmic_Clue_320x240.png",
+  "hires_image_path": "/LOCATIONS/AVERY/CABLE_CABINET/DRAWER/DRAWER_2/BLUETOOTH_LAVMIC_CLUE/Avery_BlueTooth_Lavmic_Clue.png",
   "parent": "AVERY_CABLE_CABINET_DRAWER_2",
   "parent_path": "/LOCATIONS/AVERY/CABLE_CABINET/DRAWER/DRAWER_2/Avery_Cable_Cabinet_Drawer_2.json",
   "isDiscovered": false,
   "notePath": "/GAME_STATE/NOTES_STATE/AVERY/Avery_Note.md",
-  "primary_path": "/LOCATIONS/AVERY/CABLE_CABINET/DRAWER/DRAWER_2/BLUETOOTH_LAVMIC_CLUE/Avery_Cable_Cabinet_Drawer_2_Bluetooth_Clue_320x240.png",
   "secondary_path": "/NOTES/AVERY/AUDIOPHILE/Bluetooth_LavMic_Clue.md",
   "zones": []
 }

@@ -1,0 +1,32 @@
+{
+  "buttons": [
+    {
+      "id": "left_arrow",
+      "x": 5, "y": 225, "w": 10, "h": 10,
+      "icon": "/GUI/ASSETS/arrow_left.svg",
+      "callback": "navigatePrev",
+      "visibleWhen": "notesMode"
+    },
+    {
+      "id": "locations_icon",
+      "x": 147, "y": 225, "w": 10, "h": 10,
+      "icon": "/GUI/ASSETS/locations.svg",
+      "callback": "switchToLocations",
+      "visibleWhen": "always"
+    },
+    {
+      "id": "notes_icon",
+      "x": 162, "y": 225, "w": 10, "h": 10,
+      "icon": "/GUI/ASSETS/notes.svg",
+      "callback": "switchToNotes",
+      "visibleWhen": "always"
+    },
+    {
+      "id": "right_arrow",
+      "x": 305, "y": 225, "w": 10, "h": 10,
+      "icon": "/GUI/ASSETS/arrow_right.svg",
+      "callback": "navigateNext",
+      "visibleWhen": "notesMode"
+    }
+  ]
+}

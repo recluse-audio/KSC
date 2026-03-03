@@ -50,7 +50,7 @@ static std::string runStart(TestFileOperator& fileOp)
         nextSlot++;
 
     NullGraphicsRenderer renderer;
-    GameRunner runner(fileOp, renderer, "locations", "", "", k_OutputDir);
+    GameRunner runner(fileOp, renderer, "locations", "", k_OutputDir);
     runner.loadScene("/BANNERS/START_SCREEN/Start_Screen.json");
 
     // Derive hit coordinates from the real start-screen JSON.
@@ -87,10 +87,10 @@ TEST_CASE("GameRunner initial state reflects constructor arguments", "[GameRunne
 
     SECTION("custom mode and IDs")
     {
-        GameRunner runner(fileOp, renderer, "notes", "/LOCATIONS/AVERY/ROOT/Avery_Full.json", "/NOTES/AVERY/Avery_Note.json");
+        GameRunner runner(fileOp, renderer, "notes", "/LOCATIONS/AVERY/ROOT/Avery_Full.json");
         CHECK(runner.getCurrentMode()       == "notes");
         CHECK(runner.getCurrentLocationID() == "/LOCATIONS/AVERY/ROOT/Avery_Full.json");
-        CHECK(runner.getCurrentNoteID()     == "/NOTES/AVERY/Avery_Note.json");
+        CHECK(runner.getCurrentNoteID()     == "");
     }
 }
 

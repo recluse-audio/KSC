@@ -5,9 +5,10 @@
 #pragma once
 #include <string>
 #include <memory>
+#include <vector>
 #include "../SCENE/SceneFactory.h"
 #include "../SCENE_VIEW/SceneView.h"
-#include "../CONTROLS_VIEW/ControlsView.h"
+#include "../BAR/ControlBarSection.h"
 #include "GameStartManager.h"
 
 class FileOperator;
@@ -27,8 +28,8 @@ public:
                GraphicsRenderer& renderer,
                std::string       mode       = "locations",
                std::string       locationID = "",
-               std::string       noteID     = "",
-               std::string       saveDir    = "");
+               std::string       saveDir    = "",
+               bool              useHires   = false);
 
     /**
      * Render the active scene and controls via their respective views.
@@ -59,7 +60,8 @@ private:
     FileOperator&          mFileOperator;
     GraphicsRenderer&      mRenderer;
     SceneView              mSceneView;
-    ControlsView           mControlsView;
+    ControlBarSection      mTopBar;
+    ControlBarSection      mBottomBar;
     SceneFactory           mSceneFactory;
     GameStartManager       mGameStartManager;
     std::unique_ptr<Scene> mActiveScene;
@@ -68,10 +70,13 @@ private:
     bool                   mFileMenuVisible = false;
     int                    mScrollOffset    = 0;
 
-    std::string mCurrentMode;
-    std::string mCurrentLocationID;
-    std::string mCurrentNoteID;
+    std::string              mCurrentMode;
+    std::string              mCurrentLocationID;
+    std::string              mLastLocationPath;
+    std::vector<std::string> mNoteList;
+    int                      mNoteIndex = 0;
 
+    void loadNote(const std::string& mdPath);
     void discoverNote(const std::string& notePath);
     void discoverSceneNote(const std::string& scenePath, const std::string& sceneJson);
     void refreshNote(const std::string& clueArrayKey);
