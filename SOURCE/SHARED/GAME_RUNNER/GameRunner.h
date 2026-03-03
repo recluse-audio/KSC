@@ -48,10 +48,12 @@ public:
     void loadScene(const std::string& path);
 
     void setSaveDir(const std::string& dir);
+    void scroll(int delta);
 
     std::string getCurrentMode()       const;
     std::string getCurrentLocationID() const;
     std::string getCurrentNoteID()     const;
+    bool        isFileMenuVisible()    const;
 
 private:
     FileOperator&          mFileOperator;
@@ -61,7 +63,10 @@ private:
     SceneFactory           mSceneFactory;
     GameStartManager       mGameStartManager;
     std::unique_ptr<Scene> mActiveScene;
-    bool                   mOverlayVisible = false;
+    std::unique_ptr<Scene> mFileMenuScene;
+    bool                   mOverlayVisible  = false;
+    bool                   mFileMenuVisible = false;
+    int                    mScrollOffset    = 0;
 
     std::string mCurrentMode;
     std::string mCurrentLocationID;

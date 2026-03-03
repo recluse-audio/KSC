@@ -17,12 +17,18 @@ namespace fs = std::filesystem;
  * diskRoot (optional): when set, virtual paths (leading '/') that are not in
  * the in-memory map fall back to diskRoot + path on disk. Real paths (no
  * leading '/') always fall back to disk directly.
+ *
+ * writeRoot (optional): when set, virtual paths written via writeToFile or
+ * appendToFile are resolved as writeRoot + path instead of literal path.
+ * Use this to redirect game-state writes to a test output directory without
+ * touching source data in diskRoot.
  */
 class TestFileOperator : public FileOperator
 {
 public:
     std::map<std::string, std::string> files;
-    std::string diskRoot; // e.g. "KSC_DATA"
+    std::string diskRoot;  // e.g. "KSC_DATA"
+    std::string writeRoot; // e.g. "TESTS/OUTPUT/GAME_RUNNER/KSC_DATA"
 
     std::string load(const std::string& path) override
     {
@@ -41,13 +47,26 @@ public:
 
     void writeToFile(const std::string& path, const std::string& content) override
     {
-        fs::path p(path);
+        std::string diskPath = resolvePath(path, writeRoot);
+        fs::path p(diskPath);
         fs::create_directories(p.parent_path());
         std::ofstream f(p);
         f << content;
     }
 
-    void appendToFile(const std::string&, const std::string&) override {}
+    void appendToFile(const std::string& path, const std::string& content) override
+    {
+        files[path] += content;
+
+        if (writeRoot.empty()) return;
+
+        // Write the full updated content so the disk file reflects the current state.
+        std::string diskPath = resolvePath(path, writeRoot);
+        fs::path p(diskPath);
+        fs::create_directories(p.parent_path());
+        std::ofstream f(p);
+        f << files[path];
+    }
 
     std::vector<std::string> listDirectory(const std::string& dirPath) override
     {
@@ -74,5 +93,13 @@ public:
         for (auto& entry : fs::directory_iterator(dirPath))
             entries.push_back(entry.path().filename().string());
         return entries;
+    }
+
+private:
+    static std::string resolvePath(const std::string& path, const std::string& root)
+    {
+        if (!root.empty() && !path.empty() && path[0] == '/')
+            return root + path;
+        return path;
     }
 };

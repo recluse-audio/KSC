@@ -35,7 +35,8 @@ std::unique_ptr<Scene> SceneFactory::build(const std::string& jsonString)
             scene->addZone(Zone(*scene, bounds,
                                z.value("id", ""),
                                z.value("target", ""),
-                               z.value("noteTarget", "")));
+                               z.value("noteTarget", ""),
+                               z.value("label", "")));
         }
     }
 

@@ -23,7 +23,10 @@ GameRunner::GameRunner(FileOperator& fileParser, GraphicsRenderer& renderer,
 void GameRunner::draw()
 {
     if (!mActiveScene) return;
+    mRenderer.setScrollOffset(mScrollOffset);
     mSceneView.draw(*mActiveScene, mOverlayVisible);
+    if (mFileMenuVisible && mFileMenuScene)
+        mSceneView.drawMenu(*mFileMenuScene);
     mControlsView.draw();
 }
 
@@ -35,6 +38,19 @@ void GameRunner::registerHit(int x, int y)
     if (!cb.empty())
     {
         dispatchCallback(cb);
+        return;
+    }
+
+    if (mFileMenuVisible && mFileMenuScene)
+    {
+        std::string target = mFileMenuScene->getInterceptingZoneTarget(x, y);
+        if (!target.empty())
+        {
+            mFileMenuVisible = false;
+            loadScene(target);
+            return;
+        }
+        mFileMenuVisible = false;
         return;
     }
 
@@ -87,6 +103,15 @@ void GameRunner::dispatchCallback(const std::string& callbackId)
         mCurrentMode = "notes";
         syncControlsState();
     }
+    else if (callbackId == "open_file_manager")
+    {
+        if (!mFileMenuScene)
+        {
+            std::string json = mFileOperator.load("/LOCATIONS/AVERY/DESK/COMPUTER/FILE_MENU/File_Menu.json");
+            mFileMenuScene = mSceneFactory.build(json);
+        }
+        mFileMenuVisible = !mFileMenuVisible;
+    }
     else if (callbackId == "start_button")
     {
         mGameStartManager.save();
@@ -121,7 +146,9 @@ void GameRunner::discoverSceneNote(const std::string& scenePath, const std::stri
 
 void GameRunner::loadScene(const std::string& path)
 {
-    mOverlayVisible = false;
+    mOverlayVisible  = false;
+    mFileMenuVisible = false;
+    mScrollOffset    = 0;
     std::string json = mFileOperator.load(path);
 
 #ifdef ARDUINO
@@ -181,6 +208,11 @@ void GameRunner::setSaveDir(const std::string& dir)
     mGameStartManager.setSaveDir(dir);
 }
 
+void GameRunner::scroll(int delta)
+{
+    mScrollOffset = std::max(0, mScrollOffset + delta);
+}
+
 std::string GameRunner::getCurrentMode() const
 {
     return mCurrentMode;
@@ -194,4 +226,9 @@ std::string GameRunner::getCurrentLocationID() const
 std::string GameRunner::getCurrentNoteID() const
 {
     return mCurrentNoteID;
+}
+
+bool GameRunner::isFileMenuVisible() const
+{
+    return mFileMenuVisible;
 }

@@ -46,6 +46,10 @@ int main()
             game.registerHit((int)mouse.x / SCALE, (int)mouse.y / SCALE);
         }
 
+        float wheel = GetMouseWheelMove();
+        if (wheel != 0)
+            game.scroll((int)(-wheel * 30));
+
         // --- Draw ---
         BeginDrawing();
         ClearBackground(BLACK);

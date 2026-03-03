@@ -1,0 +1,10 @@
+{
+  "id": "LOVE_OF_MY_LIFE",
+  "name": "Love_Of_My_Life",
+  "parent": "AVERY_DESK_COMPUTER",
+  "parent_path": "/LOCATIONS/AVERY/DESK/COMPUTER/Avery_Desk_Computer.json",
+  "isDiscovered": false,
+  "primary_path": "/LOCATIONS/AVERY/DESK/COMPUTER/FILES/LOVE_OF_MY_LIFE/Love_Of_My_Life.md",
+  "secondary_path": "",
+  "zones": []
+}

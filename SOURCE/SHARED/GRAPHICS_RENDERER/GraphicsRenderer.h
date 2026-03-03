@@ -15,6 +15,12 @@ class GraphicsRenderer
 public:
     virtual ~GraphicsRenderer() = default;
 
+    void setScrollOffset(int offset) { mScrollOffset = offset; }
+
+protected:
+    int mScrollOffset = 0;
+
+public:
     /**
      * Load and render an image asset from the given data-root-relative path.
      */
@@ -31,4 +37,10 @@ public:
      * screen coordinates.
      */
     virtual void drawSVG(const std::string& path, int x, int y, int w = 0, int h = 0) = 0;
+
+    /**
+     * Draw a labeled button rectangle at the given screen coordinates.
+     * Used for programmatically rendered menus (no image assets).
+     */
+    virtual void drawButton(const std::string& label, int x, int y, int w, int h) = 0;
 };

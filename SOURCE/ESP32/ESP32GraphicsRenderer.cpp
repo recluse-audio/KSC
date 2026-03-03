@@ -106,3 +106,14 @@ void ESP32GraphicsRenderer::drawText(const std::string& path, int x, int y)
 void ESP32GraphicsRenderer::drawSVG(const std::string& /*path*/,
                                     int /*x*/, int /*y*/,
                                     int /*w*/, int /*h*/) {}
+
+void ESP32GraphicsRenderer::drawButton(const std::string& label, int x, int y, int w, int h)
+{
+    mTft.fillRect(x, y, w, h, TFT_BLACK);
+    mTft.drawRect(x, y, w, h, TFT_WHITE);
+    mTft.setTextSize(1);
+    mTft.setTextColor(TFT_WHITE, TFT_BLACK);
+    int textX = x + (w - (int)label.size() * 6) / 2;
+    int textY = y + (h - 8) / 2;
+    mTft.drawString(label.c_str(), textX, textY);
+}

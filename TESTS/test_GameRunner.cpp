@@ -171,3 +171,62 @@ TEST_CASE("GameRunner start button creates save slot with default NOTES_STATE", 
         REQUIRE(written == original);
     }
 }
+
+TEST_CASE("GameRunner opens file manager when open_file_manager zone is clicked", "[GameRunner]")
+{
+    TestFileOperator fileOp;
+    fileOp.diskRoot = "KSC_DATA";
+    NullGraphicsRenderer renderer;
+
+    GameRunner runner(fileOp, renderer);
+    runner.loadScene("/LOCATIONS/AVERY/DESK/COMPUTER/Avery_Desk_Computer.json");
+
+    nlohmann::json doc = nlohmann::json::parse(
+        fileOp.load("/LOCATIONS/AVERY/DESK/COMPUTER/Avery_Desk_Computer.json"));
+    int hitX = 0, hitY = 0;
+    for (auto& zone : doc["zones"])
+    {
+        if (zone.value("id", "") == "open_file_manager")
+        {
+            hitX = zone.value("x", 0) + zone.value("width",  0) / 2;
+            hitY = zone.value("y", 0) + zone.value("height", 0) / 2;
+            break;
+        }
+    }
+
+    runner.registerHit(hitX, hitY);
+
+    CHECK(runner.isFileMenuVisible());
+}
+
+TEST_CASE("Clue discovery appends text to note after save creation", "[GameRunner]")
+{
+    TestFileOperator fileOp;
+    fileOp.diskRoot  = "KSC_DATA";
+    fileOp.writeRoot = k_OutputDir;
+    loadGameStateFiles(fileOp); // puts NOTES_STATE files into fileOp.files
+
+    // Step 1: Create a save slot (start screen → Avery root).
+    std::string slotDir = runStart(fileOp);
+    REQUIRE(fs::is_directory(slotDir));
+
+    // Step 2: Confirm defaults — the saved NOTES_STATE note has no clue entries yet.
+    std::string defaultNote = fileOp.load("/GAME_STATE/NOTES_STATE/AVERY/Avery_Note.md");
+    std::string dspClueText = fileOp.load("/NOTES/AVERY/AUDIOPHILE/DSP_Clue.md");
+    REQUIRE_FALSE(defaultNote.empty());
+    REQUIRE_FALSE(dspClueText.empty());
+
+    std::string savedNote = fileOp.load(slotDir + "/NOTES_STATE/AVERY/Avery_Note.md");
+    REQUIRE(savedNote == defaultNote);
+    REQUIRE(savedNote.find(dspClueText) == std::string::npos);
+
+    // Step 3: Trigger clue discovery by navigating to the DSP clue scene.
+    NullGraphicsRenderer renderer;
+    GameRunner runner(fileOp, renderer);
+    runner.loadScene("/LOCATIONS/AVERY/DESK/BOOKS/DSP_CLUE/DSP_Clue.json");
+
+    // Step 4: The DSP clue text must appear in the on-disk NOTES_STATE file
+    //         written to the test output directory.
+    std::string writtenNote = fileOp.load(k_OutputDir + "/GAME_STATE/NOTES_STATE/AVERY/Avery_Note.md");
+    REQUIRE(writtenNote.find(dspClueText) != std::string::npos);
+}

@@ -43,5 +43,8 @@
 # CMake build output
 BUILD/
 
+# Test output
+TESTS/OUTPUT/
+
 # Raw assets (source drawings/images, not shipped with the game)
 ASSETS/

@@ -1,0 +1,10 @@
+{
+  "id": "BUILD_PLANS",
+  "name": "Build_Plans",
+  "parent": "AVERY_DESK_COMPUTER",
+  "parent_path": "/LOCATIONS/AVERY/DESK/COMPUTER/Avery_Desk_Computer.json",
+  "isDiscovered": false,
+  "primary_path": "/LOCATIONS/AVERY/DESK/COMPUTER/FILES/BUILD_PLANS/Build_Plans.md",
+  "secondary_path": "",
+  "zones": []
+}

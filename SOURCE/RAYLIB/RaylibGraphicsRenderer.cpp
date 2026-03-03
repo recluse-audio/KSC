@@ -14,6 +14,8 @@ RaylibGraphicsRenderer::~RaylibGraphicsRenderer()
     for (auto& [path, tex] : mSvgCache)
         if (tex.id > 0)
             UnloadTexture(tex);
+    if (mFont.texture.id > 0)
+        UnloadFont(mFont);
 }
 
 std::string RaylibGraphicsRenderer::sdPath(const std::string& path)
@@ -36,17 +38,31 @@ void RaylibGraphicsRenderer::drawText(const std::string& path, int /*x*/, int y)
     {
         DrawRectangle(0, 17 * SCALE, GetScreenWidth(),
                       GetScreenHeight() - 17 * SCALE, {0, 0, 0, 200});
-        drawMarkdown(full, y, 0.5f);
+        drawMarkdown(full, y, 0.5f, false);
     }
     else
     {
-        drawMarkdown(full, 10, 1.0f);
+        drawMarkdown(full, 10, 1.0f, true);
     }
 }
 
 void RaylibGraphicsRenderer::drawSVG(const std::string& path, int x, int y, int w, int h)
 {
     drawSvgAt(sdPath(path), x, y, w, h);
+}
+
+void RaylibGraphicsRenderer::drawButton(const std::string& label, int x, int y, int w, int h)
+{
+    if (mFont.texture.id == 0)
+        mFont = LoadFontEx("KSC_DATA/GUI/anonymous_pro_bold.ttf", 32, nullptr, 0);
+
+    DrawRectangle(x * SCALE, y * SCALE, w * SCALE, h * SCALE, {0, 0, 0, 220});
+    DrawRectangleLines(x * SCALE, y * SCALE, w * SCALE, h * SCALE, WHITE);
+    float fontSize = (float)(9 * SCALE);
+    Vector2 textSize = MeasureTextEx(mFont, label.c_str(), fontSize, 1.0f);
+    float textX = x * SCALE + (w * SCALE - textSize.x) / 2.0f;
+    float textY = y * SCALE + (h * SCALE - textSize.y) / 2.0f;
+    DrawTextEx(mFont, label.c_str(), {textX, textY}, fontSize, 1.0f, WHITE);
 }
 
 // -----------------------------------------------------------------
@@ -110,12 +126,15 @@ void RaylibGraphicsRenderer::drawSvgAt(const std::string& fullPath, int x, int y
         DrawTextureEx(tex, {(float)(x * SCALE), (float)(y * SCALE)}, 0.0f, 1.0f, WHITE);
 }
 
-void RaylibGraphicsRenderer::drawMarkdown(const std::string& fullPath, int startY, float textScale)
+void RaylibGraphicsRenderer::drawMarkdown(const std::string& fullPath, int startY, float textScale, bool applyScroll)
 {
     std::ifstream file(fullPath);
     if (!file.is_open()) return;
 
-    int y = startY * SCALE;
+    if (mFont.texture.id == 0)
+        mFont = LoadFontEx("KSC_DATA/GUI/anonymous_pro_bold.ttf", 32, nullptr, 0);
+
+    int y = startY * SCALE - (applyScroll ? mScrollOffset : 0);
     std::string line;
     while (std::getline(file, line))
     {
@@ -126,10 +145,13 @@ void RaylibGraphicsRenderer::drawMarkdown(const std::string& fullPath, int start
                               ? line.substr(hashes + 1)
                               : line;
 
-        int fontSize = (int)(((hashes == 1) ? 24 : (hashes == 2) ? 18 : 14) * SCALE * textScale);
-        Color color  = (hashes > 0) ? WHITE : LIGHTGRAY;
+        float fontSize = (float)(((hashes == 1) ? 14 : (hashes == 2) ? 11 : 9) * SCALE * textScale);
+        int   lineH    = (int)(fontSize + 4 * SCALE * textScale);
+        Color color    = (hashes > 0) ? WHITE : LIGHTGRAY;
 
-        DrawText(display.c_str(), 20 * SCALE, y, fontSize, color);
-        y += fontSize + (int)(8 * SCALE * textScale);
+        if (y + lineH > 0 && y < GetScreenHeight())
+            DrawTextEx(mFont, display.c_str(), {(float)(10 * SCALE), (float)y}, fontSize, 1.0f, color);
+
+        y += lineH;
     }
 }

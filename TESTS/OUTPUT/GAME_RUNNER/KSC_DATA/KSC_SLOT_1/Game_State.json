@@ -20,6 +20,11 @@
     "/LOCATIONS/AVERY/DESK/BOOKS/SQL_CLUE/SQL_CLUE.json": false,
     "/LOCATIONS/AVERY/DESK/COMPUTER/Avery_Desk_Computer.json": true,
     "/LOCATIONS/AVERY/DESK/COMPUTER/FILES/Avery_Desk_Computer_Files.json": true,
+    "/LOCATIONS/AVERY/DESK/COMPUTER/FILES/BUILD_PLANS/Build_Plans.json": false,
+    "/LOCATIONS/AVERY/DESK/COMPUTER/FILES/LOGIN_HISTORY/Login_History.json": false,
+    "/LOCATIONS/AVERY/DESK/COMPUTER/FILES/LOVE_OF_MY_LIFE/Love_Of_My_Life.json": false,
+    "/LOCATIONS/AVERY/DESK/COMPUTER/FILES/UNTITLED_FILE/Avery_Desk_Computer_Files_Untitled_File.json": false,
+    "/LOCATIONS/AVERY/DESK/COMPUTER/FILE_MENU/File_Menu.json": true,
     "/LOCATIONS/AVERY/DESK/COMPUTER/PROGRAMS/Avery_Desk_Computer_Programs.json": true,
     "/LOCATIONS/AVERY/DESK/MAIN/Avery_Desk.json": true
   }

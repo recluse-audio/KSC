@@ -1,3 +1,4 @@
+
 {
   "id": "AVERY_DESK_COMPUTER",
   "name": "Computer",
@@ -8,18 +9,9 @@
   "secondary_path": "/LOCATIONS/AVERY/DESK/COMPUTER/Avery_Desk_Computer_Summary.md",
   "zones": [
     {
-      "id": "files_dir",
+      "id": "open_file_manager",
       "label": "Files",
-      "x": 40, "y": 80, "width": 100, "height": 40,
-      "action": "navigate",
-      "target": "/LOCATIONS/AVERY/DESK/COMPUTER/FILES/Avery_Desk_Computer_Files.json"
-    },
-    {
-      "id": "programs_dir",
-      "label": "Programs",
-      "x": 40, "y": 130, "width": 100, "height": 40,
-      "action": "navigate",
-      "target": "/LOCATIONS/AVERY/DESK/COMPUTER/PROGRAMS/Avery_Desk_Computer_Programs.json"
+      "x": 80, "y": 80, "width": 200, "height": 100
     }
   ]
 }

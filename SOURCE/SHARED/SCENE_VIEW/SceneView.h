@@ -24,6 +24,7 @@ public:
     explicit SceneView(GraphicsRenderer& renderer);
 
     void draw(const Scene& scene, bool overlayVisible);
+    void drawMenu(const Scene& menuScene);
 
 private:
     GraphicsRenderer& mRenderer;

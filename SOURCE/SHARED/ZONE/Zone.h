@@ -38,7 +38,7 @@ public:
         }
     };
 
-    Zone(Scene& scene, Bounds bounds, std::string zoneID = "Default Zone ID", std::string target = "", std::string noteTarget = "");
+    Zone(Scene& scene, Bounds bounds, std::string zoneID = "Default Zone ID", std::string target = "", std::string noteTarget = "", std::string label = "");
 
     bool containsPoint(int x, int y)
     {
@@ -56,10 +56,13 @@ public:
     const std::string getSceneID()    { return mSceneID; }
     const std::string getTarget()     { return mTarget; }
     const std::string getNoteTarget() { return mNoteTarget; }
+    const std::string getLabel()      { return mLabel; }
+    Bounds            getBounds()     { return mBounds; }
 private:
     std::string mSceneID;    // ID of the scene this zone belongs to
     Bounds mBounds;
     std::string mZoneID     = "";
     std::string mTarget     = ""; // data-root-relative path of the scene to navigate to on hit
     std::string mNoteTarget = ""; // data-root-relative path of the note to mark discovered on hit (no navigation)
+    std::string mLabel      = ""; // display text for programmatically drawn menu buttons
 };
