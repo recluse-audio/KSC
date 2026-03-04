@@ -12,7 +12,7 @@
     {
       "id": "desk",
       "label": "Desk",
-      "points": [[167, 71], [94, 126], [315, 195], [316, 97]],
+      "points": [[170, 67], [86, 127], [316, 197], [320, 93]],
       "hires_points": [[2073, 723], [1158, 1412], [3767, 2220], [3824, 1039]],
       "action": "navigate",
       "target": "/LOCATIONS/AVERY/DESK/MAIN/Avery_Desk.json"

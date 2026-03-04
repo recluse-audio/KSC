@@ -54,6 +54,10 @@ int main()
         if (wheel != 0)
             game.scroll((int)(-wheel * 30));
 
+        // Enforce 4:3 aspect ratio on resize — snap height to match width.
+        if (IsWindowResized())
+            SetWindowSize(GetScreenWidth(), GetScreenWidth() * 3 / 4);
+
         // --- Draw ---
         BeginDrawing();
         ClearBackground(BLACK);

@@ -7,41 +7,39 @@ Example:
   PNG/ORIGINAL_SIZE/AVERY/DESK/BOOKS/file.png
     -> PNG/320x240/AVERY/DESK/BOOKS/file_320x240.png
 
-By default, maintains aspect ratio and centers image on black background.
-Use --stretch for artistic scaling without aspect ratio preservation.
+By default, maintains aspect ratio and crops to fill (no letterboxing).
+Use --stretch for scaling without aspect ratio preservation.
 """
 
 import argparse
 from pathlib import Path
 from PIL import Image
 
-def resize_with_aspect_ratio(img, target_size=(320, 240), bg_color=(0, 0, 0)):
+def resize_crop(img, target_size=(320, 240)):
     """
-    Resize image to fit within target size while maintaining aspect ratio.
-    Centers the image on a background of the target size.
+    Resize image to fill target size while maintaining aspect ratio,
+    cropping any overflow from the center.
     """
     img_ratio = img.width / img.height
     target_ratio = target_size[0] / target_size[1]
 
     if img_ratio > target_ratio:
-        new_width = target_size[0]
-        new_height = int(new_width / img_ratio)
-    else:
         new_height = target_size[1]
         new_width = int(new_height * img_ratio)
+    else:
+        new_width = target_size[0]
+        new_height = int(new_width / img_ratio)
 
     resized = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
-    result = Image.new('RGB', target_size, bg_color)
-    x = (target_size[0] - new_width) // 2
-    y = (target_size[1] - new_height) // 2
-    result.paste(resized, (x, y))
-    return result
+    x = (new_width  - target_size[0]) // 2
+    y = (new_height - target_size[1]) // 2
+    return resized.crop((x, y, x + target_size[0], y + target_size[1]))
 
 def resize_stretch(img, target_size=(320, 240)):
     """Resize image to exact target size, stretching/distorting as needed."""
     return img.resize(target_size, Image.Resampling.LANCZOS)
 
-def resize_images(source_root, target_root, target_size=(320, 240), stretch=False):
+def resize_images(source_root, target_root, target_size=(320, 240), stretch=False, force=False):
     """
     Recursively resize all PNG images from source_root to target_root,
     mirroring the subdirectory structure.
@@ -75,7 +73,7 @@ def resize_images(source_root, target_root, target_size=(320, 240), stretch=Fals
         output_file = target_root / rel.parent / output_filename
         output_file.parent.mkdir(parents=True, exist_ok=True)
 
-        if output_file.exists():
+        if output_file.exists() and not force:
             print(f"Skipping {rel} (already exists)")
             skipped += 1
             continue
@@ -88,7 +86,7 @@ def resize_images(source_root, target_root, target_size=(320, 240), stretch=Fals
                 if stretch:
                     resized_img = resize_stretch(img, target_size)
                 else:
-                    resized_img = resize_with_aspect_ratio(img, target_size)
+                    resized_img = resize_crop(img, target_size)
 
                 resized_img.save(output_file, 'PNG')
                 print(f"Resized {rel} -> {output_file.relative_to(target_root.parent)}")
@@ -116,17 +114,29 @@ if __name__ == "__main__":
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  # Use defaults (320x240, maintain aspect ratio)
+  # Default: crop-to-fill at both 320x240 and 640x480, skip existing files
   python resize_png.py
 
-  # Custom dimensions
+  # Force overwrite all existing output files
+  python resize_png.py --force
+
+  # Single custom size
   python resize_png.py --width 480 --height 320
 
-  # Artistic stretch (no aspect ratio)
-  python resize_png.py --width 100 --height 500 --stretch
+  # Single custom size, force overwrite
+  python resize_png.py --width 480 --height 320 --force
 
-  # Custom source and target
-  python resize_png.py --source /path/to/images --target /path/to/output
+  # Stretch to exact dimensions (distorts if aspect ratio differs)
+  python resize_png.py --width 320 --height 240 --stretch
+
+  # Custom source folder
+  python resize_png.py --source ASSETS/IMAGES/PNG/ORIGINAL_SIZE/AVERY
+
+  # Custom source and explicit target folder
+  python resize_png.py --source ASSETS/IMAGES/PNG/ORIGINAL_SIZE/AVERY --target KSC_DATA/LOCATIONS/AVERY
+
+  # Full example: single scene, specific size, force overwrite, custom paths
+  python resize_png.py -w 320 -H 240 --force -s ASSETS/IMAGES/PNG/ORIGINAL_SIZE/AVERY -t KSC_DATA/LOCATIONS/AVERY
         """
     )
 
@@ -140,6 +150,8 @@ Examples:
         help='Target root directory (default: auto-generated based on dimensions)')
     parser.add_argument('--stretch', action='store_true',
         help='Stretch image to exact dimensions (no aspect ratio)')
+    parser.add_argument('--force', action='store_true',
+        help='Overwrite existing output files')
 
     args = parser.parse_args()
 
@@ -155,7 +167,7 @@ Examples:
             parser.error(f"Height must be between 1 and 10000 (got {h})")
         target_dir = Path(args.target) if args.target else \
             project_root / "ASSETS" / "IMAGES" / "PNG" / f"{w}x{h}"
-        resize_images(source_dir, target_dir, target_size=(w, h), stretch=args.stretch)
+        resize_images(source_dir, target_dir, target_size=(w, h), stretch=args.stretch, force=args.force)
     else:
         for (w, h) in [(320, 240), (640, 480)]:
             target_dir = Path(args.target) if args.target else \
@@ -163,4 +175,4 @@ Examples:
             print(f"\n{'='*50}")
             print(f"Resizing to {w}x{h}")
             print(f"{'='*50}")
-            resize_images(source_dir, target_dir, target_size=(w, h), stretch=args.stretch)
+            resize_images(source_dir, target_dir, target_size=(w, h), stretch=args.stretch, force=args.force)
