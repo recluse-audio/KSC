@@ -11,19 +11,21 @@
 // gameScale() fits that canvas into the current window while preserving ratio.
 // gameOffset() returns the top-left pixel of the letterboxed canvas.
 // ---------------------------------------------------------------------------
-// GetRenderWidth/Height returns the actual framebuffer size in physical pixels,
-// which is what all Raylib draw calls operate in. GetScreenWidth/Height can
-// return logical (DPI-unscaled) dimensions on Windows, causing a mismatch.
+// GetScreenWidth/Height returns the logical window dimensions, which matches
+// the coordinate space used by GetMousePosition() and by Raylib draw calls on
+// Windows (the OS handles any DPI scaling transparently when FLAG_WINDOW_HIGHDPI
+// is not set). Using render (framebuffer) dimensions here caused a mismatch
+// between drawn polygon positions and reported mouse coordinates.
 static float gameScale()
 {
-    return std::min(GetRenderWidth() / 320.0f, GetRenderHeight() / 240.0f);
+    return std::min(GetScreenWidth() / 320.0f, GetScreenHeight() / 240.0f);
 }
 
 static Vector2 gameOffset()
 {
     float s = gameScale();
-    return { (GetRenderWidth()  - 320.0f * s) / 2.0f,
-             (GetRenderHeight() - 240.0f * s) / 2.0f };
+    return { (GetScreenWidth()  - 320.0f * s) / 2.0f,
+             (GetScreenHeight() - 240.0f * s) / 2.0f };
 }
 
 // Game-space coord → screen pixel (with letterbox offset)
@@ -55,8 +57,6 @@ std::string RaylibGraphicsRenderer::sdPath(const std::string& path)
 void RaylibGraphicsRenderer::toGameCoords(int screenX, int screenY,
                                            int& gameX,  int& gameY) const
 {
-    // Mouse position from Raylib is already in render (physical pixel) space,
-    // so the same scale/offset used for drawing applies here.
     float   s   = gameScale();
     Vector2 off = gameOffset();
     gameX = (int)((screenX - off.x) / s);
@@ -87,6 +87,24 @@ void RaylibGraphicsRenderer::drawText(const std::string& path, int /*x*/, int y)
 void RaylibGraphicsRenderer::drawSVG(const std::string& path, int x, int y, int w, int h)
 {
     drawSvgAt(sdPath(path), x, y, w, h);
+}
+
+void RaylibGraphicsRenderer::drawRect(int x, int y, int w, int h)
+{
+    DrawRectangleLinesEx({ gx(x), gy(y), gp(w), gp(h) }, 1.0f, { 255, 255, 0, 200 });
+}
+
+void RaylibGraphicsRenderer::drawPolygon(const std::vector<std::pair<int, int>>& points)
+{
+    if (points.size() < 2) return;
+    int n = (int)points.size();
+    for (int i = 0; i < n; i++)
+    {
+        int j = (i + 1) % n;
+        DrawLine((int)gx(points[i].first), (int)gy(points[i].second),
+                 (int)gx(points[j].first), (int)gy(points[j].second),
+                 { 255, 255, 0, 200 });
+    }
 }
 
 void RaylibGraphicsRenderer::beginContentArea(int x, int y, int w, int h)

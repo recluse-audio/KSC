@@ -23,7 +23,7 @@ class SceneView
 public:
     explicit SceneView(GraphicsRenderer& renderer);
 
-    void draw(const Scene& scene, bool overlayVisible);
+    void draw(const Scene& scene, bool overlayVisible, bool zoneDisplayVisible = false);
     void drawMenu(const Scene& menuScene);
 
 private:

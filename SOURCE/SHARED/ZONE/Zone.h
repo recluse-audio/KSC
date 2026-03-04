@@ -4,6 +4,8 @@
 
 #pragma once
 #include <string>
+#include <utility>
+#include <vector>
 
 class Scene; // forward declaration - only a reference is needed
 /**
@@ -38,29 +40,27 @@ public:
         }
     };
 
+    using Point   = std::pair<int, int>;
+    using Polygon = std::vector<Point>;
+
     Zone(Scene& scene, Bounds bounds, std::string zoneID = "Default Zone ID", std::string target = "", std::string noteTarget = "", std::string label = "");
 
-    bool containsPoint(int x, int y)
-    {
-        bool doesContain = true;
+    bool containsPoint(int x, int y) const;
 
-        if(x < mBounds.mX || x > mBounds.mX + mBounds.mW)
-            doesContain = false; // too far left or right
-        else if(y < mBounds.mY || y > mBounds.mY + mBounds.mH)
-            doesContain = false;
+    void           setPolygon(Polygon polygon) { mPolygon = std::move(polygon); }
+    bool           hasPolygon()          const { return !mPolygon.empty(); }
+    const Polygon& getPolygon()          const { return mPolygon; }
 
-        return doesContain;
-    }
-
-    const std::string getZoneID()     { return mZoneID; }
-    const std::string getSceneID()    { return mSceneID; }
-    const std::string getTarget()     { return mTarget; }
-    const std::string getNoteTarget() { return mNoteTarget; }
-    const std::string getLabel()      { return mLabel; }
-    Bounds            getBounds()     { return mBounds; }
+    const std::string getZoneID()     const { return mZoneID; }
+    const std::string getSceneID()    const { return mSceneID; }
+    const std::string getTarget()     const { return mTarget; }
+    const std::string getNoteTarget() const { return mNoteTarget; }
+    const std::string getLabel()      const { return mLabel; }
+    Bounds            getBounds()     const { return mBounds; }
 private:
     std::string mSceneID;    // ID of the scene this zone belongs to
-    Bounds mBounds;
+    Bounds      mBounds;
+    Polygon     mPolygon;    // optional; if non-empty, used for hit-testing instead of mBounds
     std::string mZoneID     = "";
     std::string mTarget     = ""; // data-root-relative path of the scene to navigate to on hit
     std::string mNoteTarget = ""; // data-root-relative path of the note to mark discovered on hit (no navigation)

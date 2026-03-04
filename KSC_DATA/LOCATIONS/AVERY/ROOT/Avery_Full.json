@@ -7,24 +7,21 @@
   "isRoot": true,
   "isDiscovered": true,
   "secondary_path": "/LOCATIONS/AVERY/ROOT/Avery_Full_Summary.md",
+  "hires_canvas": { "width": 3936, "height": 2648 },
   "zones": [
     {
       "id": "desk",
       "label": "Desk",
-      "x": 160,
-      "y": 80,
-      "width": 120,
-      "height": 100,
+      "points": [[167, 71], [94, 126], [315, 195], [316, 97]],
+      "hires_points": [[2073, 723], [1158, 1412], [3767, 2220], [3824, 1039]],
       "action": "navigate",
       "target": "/LOCATIONS/AVERY/DESK/MAIN/Avery_Desk.json"
     },
     {
       "id": "cable_cabinet",
       "label": "Cable Cabinet",
-      "x": 20,
-      "y": 80,
-      "width": 100,
-      "height": 140,
+      "points": [[53, 100], [34, 120], [53, 211], [98, 204], [87, 121], [90, 104]],
+      "hires_points": [[599, 1130], [457, 1378], [751, 2592], [1203, 2496], [1056, 1401], [1096, 1130]],
       "action": "navigate",
       "target": "/LOCATIONS/AVERY/CABLE_CABINET/MAIN/Avery_Cable_Cabinet.json"
     }

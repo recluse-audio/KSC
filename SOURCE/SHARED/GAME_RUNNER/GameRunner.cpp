@@ -26,7 +26,7 @@ void GameRunner::draw()
 {
     if (!mActiveScene) return;
     mRenderer.setScrollOffset(mScrollOffset);
-    mSceneView.draw(*mActiveScene, mOverlayVisible);
+    mSceneView.draw(*mActiveScene, mOverlayVisible, mZoneDisplayVisible);
     if (mFileMenuVisible && mFileMenuScene)
         mSceneView.drawMenu(*mFileMenuScene);
     // Bars drawn last so they are never obstructed by scene content.
@@ -84,6 +84,10 @@ void GameRunner::dispatchCallback(const std::string& callbackId)
     {
         mOverlayVisible = !mOverlayVisible;
         syncControlsState();
+    }
+    else if (callbackId == "toggleZoneDisplay")
+    {
+        mZoneDisplayVisible = !mZoneDisplayVisible;
     }
     else if (callbackId == "navigateUp")
     {

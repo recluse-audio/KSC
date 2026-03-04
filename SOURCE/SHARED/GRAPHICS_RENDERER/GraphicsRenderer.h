@@ -4,6 +4,8 @@
 
 #pragma once
 #include <string>
+#include <utility>
+#include <vector>
 
 /**
  * Abstract base class for platform-specific drawing primitives.
@@ -46,4 +48,16 @@ public:
      * Used for programmatically rendered menus (no image assets).
      */
     virtual void drawButton(const std::string& label, int x, int y, int w, int h) = 0;
+
+    /**
+     * Draw a rectangle outline at the given game-space coordinates.
+     * Used by the zone display debug overlay. Default is a no-op.
+     */
+    virtual void drawRect(int x, int y, int w, int h) {}
+
+    /**
+     * Draw a closed polygon outline through the given game-space points.
+     * Used by the zone display debug overlay. Default is a no-op.
+     */
+    virtual void drawPolygon(const std::vector<std::pair<int, int>>& points) {}
 };

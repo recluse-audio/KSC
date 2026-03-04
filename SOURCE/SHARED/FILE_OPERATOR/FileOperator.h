@@ -36,4 +36,5 @@ public:
      * Returns an empty vector if the directory does not exist or cannot be opened.
      */
     virtual std::vector<std::string> listDirectory(const std::string& dirPath) = 0;
+
 };

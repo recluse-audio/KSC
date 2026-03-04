@@ -13,6 +13,13 @@
       "icon": "/GUI/ASSETS/arrow_up.svg",
       "callback": "navigateUp",
       "visibleWhen": "locationsNonRoot"
+    },
+    {
+      "id": "zone_display_toggle",
+      "x": 155, "y": 2, "w": 10, "h": 11,
+      "icon": "/GUI/ASSETS/Zone_Display_Toggle.svg",
+      "callback": "toggleZoneDisplay",
+      "visibleWhen": "always"
     }
   ]
 }

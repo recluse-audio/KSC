@@ -66,8 +66,9 @@ private:
     GameStartManager       mGameStartManager;
     std::unique_ptr<Scene> mActiveScene;
     std::unique_ptr<Scene> mFileMenuScene;
-    bool                   mOverlayVisible  = false;
-    bool                   mFileMenuVisible = false;
+    bool                   mOverlayVisible      = false;
+    bool                   mFileMenuVisible     = false;
+    bool                   mZoneDisplayVisible  = false;
     int                    mScrollOffset    = 0;
 
     std::string              mCurrentMode;

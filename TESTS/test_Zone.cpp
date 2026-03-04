@@ -54,6 +54,53 @@ TEST_CASE("Zone containsPoint", "[Zone]")
     }
 }
 
+// Triangle polygon: (10,10), (50,10), (30,40)
+TEST_CASE("Zone polygon containsPoint", "[Zone]")
+{
+    Scene scene("TestScene");
+    Zone::Bounds bounds(10, 10, 40, 30);
+    Zone zone(scene, bounds, "PolyZone");
+    zone.setPolygon({{ 10, 10 }, { 50, 10 }, { 30, 40 }});
+
+    SECTION("centroid is inside")
+    {
+        REQUIRE(zone.containsPoint(30, 20) == true);
+    }
+
+    SECTION("point outside triangle but inside bounding rect returns false")
+    {
+        REQUIRE(zone.containsPoint(12, 38) == false);
+    }
+
+    SECTION("point outside bounding rect returns false")
+    {
+        REQUIRE(zone.containsPoint(5, 20) == false);
+    }
+
+    SECTION("vertex is inside")
+    {
+        REQUIRE(zone.containsPoint(10, 10) == true);
+    }
+}
+
+TEST_CASE("Zone hasPolygon", "[Zone]")
+{
+    Scene scene("TestScene");
+    Zone::Bounds bounds(0, 0, 100, 100);
+    Zone zone(scene, bounds, "Z");
+
+    SECTION("false before setPolygon")
+    {
+        REQUIRE(zone.hasPolygon() == false);
+    }
+
+    SECTION("true after setPolygon")
+    {
+        zone.setPolygon({{ 0, 0 }, { 10, 0 }, { 5, 10 }});
+        REQUIRE(zone.hasPolygon() == true);
+    }
+}
+
 TEST_CASE("Zone getZoneID", "[Zone]")
 {
     Scene scene("TestScene");

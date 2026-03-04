@@ -31,7 +31,7 @@ static void drawPath(GraphicsRenderer& renderer, const std::string& path, int x,
         renderer.drawSVG(path, x, y);
 }
 
-void SceneView::draw(const Scene& scene, bool overlayVisible)
+void SceneView::draw(const Scene& scene, bool overlayVisible, bool zoneDisplayVisible)
 {
     const std::string& primary = scene.getPrimaryPath();
 
@@ -63,6 +63,20 @@ void SceneView::draw(const Scene& scene, bool overlayVisible)
         mRenderer.beginContentArea(CONTENT_X, CONTENT_Y, CONTENT_W, CONTENT_H);
         drawPath(mRenderer, scene.getSecondaryPath(), 0, 20);
         mRenderer.endContentArea();
+    }
+
+    if (zoneDisplayVisible)
+    {
+        for (auto zone : scene.getZones())
+        {
+            if (zone.hasPolygon())
+                mRenderer.drawPolygon(zone.getPolygon());
+            else
+            {
+                Zone::Bounds b = zone.getBounds();
+                mRenderer.drawRect(b.mX, b.mY, b.mW, b.mH);
+            }
+        }
     }
 }
 

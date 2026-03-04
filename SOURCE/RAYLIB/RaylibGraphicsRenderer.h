@@ -28,6 +28,8 @@ public:
     void drawText(const std::string& path, int x, int y) override;
     void drawSVG(const std::string& path, int x, int y, int w = 0, int h = 0) override;
     void drawButton(const std::string& label, int x, int y, int w, int h) override;
+    void drawRect(int x, int y, int w, int h) override;
+    void drawPolygon(const std::vector<std::pair<int, int>>& points) override;
     void beginContentArea(int x, int y, int w, int h) override;
     void endContentArea() override;
 

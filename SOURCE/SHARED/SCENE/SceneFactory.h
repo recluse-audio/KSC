@@ -10,6 +10,8 @@
 /**
  * Parses a scene JSON string and constructs a fully populated Scene.
  * Used by GameRunner to build the active scene from file content.
+ *
+ * Zone coordinates in JSON must be in 320x240 game space.
  */
 class SceneFactory
 {
@@ -20,10 +22,6 @@ public:
      */
     explicit SceneFactory(bool useHires = false);
 
-    /**
-     * Parse the given JSON string and return a heap-allocated Scene.
-     * Ownership is transferred to the caller via unique_ptr.
-     */
     std::unique_ptr<Scene> build(const std::string& jsonString);
 
 private:
